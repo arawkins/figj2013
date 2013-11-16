@@ -50,10 +50,10 @@ scene.add( cube );
 	scene.add(floor2);
 	
 function init() {
-
-	camera.position.z = 30;
-	camera.position.y = 25;
-	//camera.position.x = (gridWidth + gridWidth*cubePadding)/2;
+	player.x = 30;
+	player.y = 25;
+	camera.position.z = player.x;
+	camera.position.y = player.y;
 	window.addEventListener('keyup', function(event) { Key.onKeyup(event); }, false);
 	window.addEventListener('keydown', function(event) { Key.onKeydown(event); }, false);
 	
@@ -67,25 +67,10 @@ function animloop() {
 }
 
 function render() {
-
+	
 	controls(camera, -floorHalfWidth, floorHalfWidth);
-
-	/*
-	var frontLeftCube = grid[grid.length-1][0];
-	if (frontLeftCube.position.z > camera.position.z) {
-		var lastRow = grid.pop();
-		for (var i=0;i<lastRow.length;i++) {
-			var cube = lastRow[i];
-			cube.position.z -= gridDepth + gridDepth*cubePadding;
-		}
-		var newRow = shuffle(lastRow);
-		grid.unshift(shuffle(newRow));
-	}
-*/
-
 	
 	if (floor.position.z- floorHalfHeight > camera.position.z) {
-		//console.log(floor.position.z);
 		floor.position.z -= floor.geometry.height*2;
 	}
 

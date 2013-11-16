@@ -29,8 +29,13 @@ var controls = function (camera, leftBound, rightBound) {
 		}
 		sinceLeftDown = 0;
 		wasLeftDown = true;
-		cameraVX -= cameraAccel;
-		if (cameraVX < -cameraMaxVelocity) cameraVX = -cameraMaxVelocity;
+		
+		//player.vx -= player.turnSpeed;
+		player.turnLeft();
+		
+		//cameraVX -= cameraAccel;
+		//if (cameraVX < -cameraMaxVelocity) cameraVX = -cameraMaxVelocity;
+		
 		
 	} else if (wasLeftDown) {
 		sinceLeftDown++;
@@ -42,36 +47,45 @@ var controls = function (camera, leftBound, rightBound) {
 		}
 		sinceRightDown = 0;
 		wasRightDown= true;
-		cameraVX += cameraAccel;
-		if (cameraVX > cameraMaxVelocity) cameraVX = cameraMaxVelocity;
+		
+		player.turnRight();
+		//cameraVX += cameraAccel;
+		//if (cameraVX > cameraMaxVelocity) cameraVX = cameraMaxVelocity;
 		
 	} else if(wasRightDown) {
 		sinceRightDown++;
 	}
 	
-	
-	cameraVX *= cameraDrag;
-	if (Math.abs(cameraVX) < .01) cameraVX = 0;
-	
-	
-	var newRotation = -cameraVX * 0.03;
-	if (newRotation < -maxRoll) newRotation = -maxRoll;
-	else if (newRotation > maxRoll) newRotation = maxRoll;
+	player.applyDrift();
+	//cameraVX *= cameraDrag;
+	//if (Math.abs(cameraVX) < .01) cameraVX = 0;
 	
 	
-	camera.rotation.z  = newRotation;
-
-	var adjustedScroll = scrollSpeed;
-
+	player.applyRoll();
+	//var newRotation = -cameraVX * 0.03;
+	//if (newRotation < -maxRoll) newRotation = -maxRoll;
+	//else if (newRotation > maxRoll) newRotation = maxRoll;
+	
+	
+	//camera.rotation.z  = newRotation;
+	
+	camera.rotation.z = player.rotation;
+	
+	var adjustedScroll = player.speed;
+	/*
 	if (Key.isDown(Key.UP)) {
 		adjustedScroll *= 2;
 	}
 	if (Key.isDown(Key.DOWN)) {
 		adjustedScroll /=2 ;
 	}
-
-	camera.position.z -= adjustedScroll;
-	camera.position.x += cameraVX;
+	*/
+	player.update();
+	camera.position.x = player.x;
+	camera.position.z = player.z;
+	//camera.position.z -= adjustedScroll;
+	
+	
 	if(camera.position.x < leftBound) camera.position.x = leftBound;
 	else if (camera.position.x > rightBound) camera.position.x = rightBound;
 };
