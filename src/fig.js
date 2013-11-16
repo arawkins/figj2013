@@ -58,7 +58,7 @@ function animloop() {
 
 function collision() {
 	console.log(" Hit ", frameCounter);
-  player.crash();
+	player.crash();
 }
 
 function render() {
