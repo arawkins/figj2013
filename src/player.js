@@ -150,8 +150,9 @@ var player = {
 				this.vy = this.flipSpeed;
 				this.inverted = false;
 			}
-			
+			return true;
 		}
+		else return false;
 		/*
 		if (this.vx > 0 ) {
 			this.vx = this.flipSpeed * 2;

@@ -63,7 +63,7 @@ function collision() {
 function render() {
 	frameCounter++;
 
-	controls(camera, -floorHalfWidth, floorHalfWidth);
+	controls(camera, -floorHalfWidth, floorHalfWidth, ship);
 
 	if (floor.position.z- floorHalfHeight > camera.position.z) {
 		floor.position.z -= floor.geometry.height*2;
@@ -74,7 +74,7 @@ function render() {
 	}
 
 	// camera box / ship
-	ship.position.set(camera.position.x, camera.position.y - 25, camera.position.z - 120);
+	//ship.position.set(camera.position.x, camera.position.y - 25, camera.position.z - 120);
 
 	var originPoint = ship.position.clone();
 
