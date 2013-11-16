@@ -28,8 +28,8 @@ var usedBullets = [];
 var floorTexture = new THREE.ImageUtils.loadTexture( 'gfx/checkerboard.png' );
 floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
 floorTexture.repeat.set( 20, 20 );
-var floorMaterial = new THREE.MeshBasicMaterial( { map: floorTexture, side: THREE.DoubleSide } );
-var floorGeometry = new THREE.PlaneGeometry(3000, 3000, 10, 10);
+var floorMaterial = new THREE.MeshLambertMaterial( { map: floorTexture, side: THREE.DoubleSide } );
+var floorGeometry = new THREE.PlaneGeometry(3000, 10000, 10, 10);
 var floor = new THREE.Mesh(floorGeometry, floorMaterial);
 var floor2 = new THREE.Mesh(floorGeometry, floorMaterial);
 var floorHalfHeight = floor.geometry.height/2;
@@ -44,6 +44,13 @@ floor2.position.z = -floor.geometry.height;
 scene.add(floor);
 scene.add(floor2);
 
+
+// LIGHT
+	var light = new THREE.HemisphereLight(0xffffff, 0xffffff,2);
+	//light.position.set(0,150,0);
+	scene.add(light);
+	
+	
 function init() {
 	player.init();
 	
@@ -89,6 +96,9 @@ function shoot() {
 
 function render() {
 	frameCounter++;
+	
+	//light.position.z = player.z;
+	//light.position.x = player.x;
 	
 	if(!player.dead) {
 		

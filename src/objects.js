@@ -7,12 +7,12 @@ var objects = (function () {
 		// Create an array of materials to be used in a cube, one for each side
 		var cubeMaterialArray = [];
 		// order to add materials: x+,x-,y+,y-,z+,z-
-		cubeMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0xff3333 } ) );
-		cubeMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0xff8800 } ) );
-		cubeMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0xffff33 } ) );
-		cubeMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0x33ff33 } ) );
-		cubeMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0x3333ff } ) );
-		cubeMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0x8833ff } ) );
+		cubeMaterialArray.push( new THREE.MeshLambertMaterial( { color: 0xff3333 } ) );
+		cubeMaterialArray.push( new THREE.MeshLambertMaterial( { color: 0xff8800 } ) );
+		cubeMaterialArray.push( new THREE.MeshLambertMaterial( { color: 0xffff33 } ) );
+		cubeMaterialArray.push( new THREE.MeshLambertMaterial( { color: 0x33ff33 } ) );
+		cubeMaterialArray.push( new THREE.MeshLambertMaterial( { color: 0x3333ff } ) );
+		cubeMaterialArray.push( new THREE.MeshLambertMaterial( { color: 0x8833ff } ) );
 		var cubeMaterials = new THREE.MeshFaceMaterial( cubeMaterialArray );
 		// Cube parameters: width (x), height (y), depth (z),
 		//        (optional) segments along x, segments along y, segments along z
@@ -27,7 +27,7 @@ var objects = (function () {
 	
 	function makeBullet() {
 	
-		var bulletMaterial = new THREE.MeshBasicMaterial({color:0xffb0fc});
+		var bulletMaterial = new THREE.MeshLambertMaterial({color:0xffb0fc});
 		var bulletGeometry = new THREE.CubeGeometry(2,2,100,1,1,1);
 		var bullet = new THREE.Mesh(bulletGeometry, bulletMaterial);
 		return bullet;
