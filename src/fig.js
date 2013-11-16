@@ -21,6 +21,9 @@ var ship = objects.makeShip();
 ship.position.set(30, 30, camera.position.z - 200)
 scene.add(ship);
 
+var bullets = [];
+var usedBullets = [];
+
 // FLOOR
 var floorTexture = new THREE.ImageUtils.loadTexture( 'gfx/checkerboard.png' );
 floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
@@ -60,10 +63,49 @@ function collision() {
 	player.crash();
 }
 
+function shoot() {
+	if (usedBullets.length > 0)  {
+		
+		var bullet = usedBullets.pop();
+	} else {
+		var bullet = objects.makeBullet();
+	}	
+	
+	bullet.position.set(player.x-10,player.y,player.z-20);
+	scene.add(bullet);
+	bullets.push(bullet);
+	
+	if (usedBullets.length > 0) 
+		var bullet2 = usedBullets.pop();
+	else {
+		var bullet2 = objects.makeBullet();
+	}	
+	
+	var bullet2 = objects.makeBullet();
+	bullet2.position.set(player.x+10,player.y,player.z-20);
+	scene.add(bullet2);
+	bullets.push(bullet2);
+}
+
 function render() {
 	frameCounter++;
 	
 	if(!player.dead) {
+		
+		if(Key.isDown(Key.SPACE)) {
+			shoot();
+		}
+		
+		for (var i=0;i<bullets.length;i++) {
+			var thisBullet = bullets[i];
+			thisBullet.position.z -= player.speed * 5;
+			if (Math.abs(thisBullet.position.z - player.z) > 3000) {
+				bullets.splice(i,1);
+				scene.remove(thisBullet);
+				usedBullets.push(thisBullet);
+			}
+		}
+		
 		controls(camera, -floorHalfWidth, floorHalfWidth, ship);
 	} else {
 		console.log("play again?");

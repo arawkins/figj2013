@@ -1,4 +1,6 @@
 var objects = (function () {
+
+
 	// Cube idea
 	function makeCube(dimensions) {
 		var cube;
@@ -19,7 +21,17 @@ var objects = (function () {
 		//   causes the mesh to use the materials stored in the geometry
 		cube = new THREE.Mesh( cubeGeometry, cubeMaterials );
 		return cube;
-	}
+	};
+	
+	
+	
+	function makeBullet() {
+	
+		var bulletMaterial = new THREE.MeshBasicMaterial({color:0xffb0fc});
+		var bulletGeometry = new THREE.CubeGeometry(2,2,100,1,1,1);
+		var bullet = new THREE.Mesh(bulletGeometry, bulletMaterial);
+		return bullet;
+	};
 
 	function makeShip() {
 		return makeCube({x: 20, y: 10, z: 30});
@@ -27,7 +39,8 @@ var objects = (function () {
 
 	return {
 		makeShip: makeShip,
-		makeCube: makeCube
+		makeCube: makeCube,
+		makeBullet: makeBullet
 	};
 
 })()
