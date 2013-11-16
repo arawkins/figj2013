@@ -57,8 +57,13 @@ function init() {
 	window.addEventListener('keyup', function(event) { Key.onKeyup(event); }, false);
 	window.addEventListener('keydown', function(event) { Key.onKeydown(event); }, false);
 	
-	render();
+	animloop();
 	
+}
+
+function animloop() {
+	requestAnimationFrame(animloop);
+	render();
 }
 
 function render() {
@@ -82,15 +87,13 @@ function render() {
 	if (floor.position.z- floorHalfHeight > camera.position.z) {
 		//console.log(floor.position.z);
 		floor.position.z -= floor.geometry.height*2;
-	} 
+	}
 
 	if (floor2.position.z- floorHalfHeight > camera.position.z) {
 		floor2.position.z -= floor2.geometry.height*2;
 	}
-	requestAnimationFrame(render);
 	renderer.render(scene, camera);
 }
-
 
 init();
 
