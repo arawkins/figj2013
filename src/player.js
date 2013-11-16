@@ -189,5 +189,9 @@ var player = {
 
 	crash: function () {
 		console.log('i am now a dead pilot');
+		this.speed = 0;
+		this.boostSpeed = 0;
+		this.vx = this.vy = 0;
+		this.turnSpeed = 0;
 	}
 }

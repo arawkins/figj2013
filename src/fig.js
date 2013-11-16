@@ -15,6 +15,8 @@ cube.position.set(-60, 60, camera.position.z - 1900);
 scene.add(cube);
 collidableMeshList.push(cube);
 
+//obstacles
+
 var ship = objects.makeShip();
 ship.position.set(30, 30, camera.position.z - 200)
 scene.add(ship);
