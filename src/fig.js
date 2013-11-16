@@ -34,11 +34,11 @@ scene.add( cube );
 	floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping; 
 	floorTexture.repeat.set( 10, 10 );
 	var floorMaterial = new THREE.MeshBasicMaterial( { map: floorTexture, side: THREE.DoubleSide } );
-	var floorGeometry = new THREE.PlaneGeometry(1000, 1000, 10, 10);
+	var floorGeometry = new THREE.PlaneGeometry(500, 1000, 10, 10);
 	var floor = new THREE.Mesh(floorGeometry, floorMaterial);
 	var floor2 = new THREE.Mesh(floorGeometry, floorMaterial);
 	var floorHalfHeight = floor.geometry.height/2;
-	
+	var floorHalfWidth = floor.geometry.width/2;
 	floor.position.y = -20;
 	floor.rotation.x = Math.PI / 2;
 	
@@ -68,7 +68,7 @@ function animloop() {
 
 function render() {
 
-	controls(camera);
+	controls(camera, -floorHalfWidth, floorHalfWidth);
 
 	/*
 	var frontLeftCube = grid[grid.length-1][0];
