@@ -10,39 +10,12 @@ var renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
-
-// Cube idea
-function makeCube(dimensions) {
-	var cube;
-	// Create an array of materials to be used in a cube, one for each side
-	var cubeMaterialArray = [];
-	// order to add materials: x+,x-,y+,y-,z+,z-
-	cubeMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0xff3333 } ) );
-	cubeMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0xff8800 } ) );
-	cubeMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0xffff33 } ) );
-	cubeMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0x33ff33 } ) );
-	cubeMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0x3333ff } ) );
-	cubeMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0x8833ff } ) );
-	var cubeMaterials = new THREE.MeshFaceMaterial( cubeMaterialArray );
-	// Cube parameters: width (x), height (y), depth (z),
-	//        (optional) segments along x, segments along y, segments along z
-	var cubeGeometry = new THREE.CubeGeometry( dimensions.x, dimensions.y, dimensions.z, 1, 1, 1 );
-	// using THREE.MeshFaceMaterial() in the constructor below
-	//   causes the mesh to use the materials stored in the geometry
-	cube = new THREE.Mesh( cubeGeometry, cubeMaterials );
-	return cube;
-}
-
-function makeShip() {
-	return makeCube({x: 20, y: 10, z: 30});
-};
-
-var cube = makeCube({x:100,y:100,z:100});
+var cube = objects.makeCube({x:100,y:100,z:100});
 cube.position.set(-60, 60, camera.position.z - 1900);
 scene.add(cube);
 collidableMeshList.push(cube);
 
-var ship = makeShip();
+var ship = objects.makeShip();
 ship.position.set(30, 30, camera.position.z - 200)
 scene.add(ship);
 
@@ -103,17 +76,13 @@ function render() {
 	// camera box / ship
 	ship.position.set(camera.position.x, camera.position.y - 25, camera.position.z - 120);
 
-	// BEGIN: copied collision code
-	var MovingCube = ship;
-	var originPoint = MovingCube.position.clone();
+	var originPoint = ship.position.clone();
 
-//	clearText();
-
-	for (var vertexIndex = 0; vertexIndex < MovingCube.geometry.vertices.length; vertexIndex++)
+	for (var vertexIndex = 0; vertexIndex < ship.geometry.vertices.length; vertexIndex++)
 	{
-		var localVertex = MovingCube.geometry.vertices[vertexIndex].clone();
-		var globalVertex = localVertex.applyMatrix4( MovingCube.matrix );
-		var directionVector = globalVertex.sub( MovingCube.position );
+		var localVertex = ship.geometry.vertices[vertexIndex].clone();
+		var globalVertex = localVertex.applyMatrix4( ship.matrix );
+		var directionVector = globalVertex.sub( ship.position );
 
 		var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
 		var collisionResults = ray.intersectObjects( collidableMeshList );
@@ -124,10 +93,6 @@ function render() {
 			//appendText(" Hit ");
 		}
 	}
-
-	//controls.update();
-	//stats.update();
-	// END: copied collision code
 
 	renderer.render(scene, camera);
 }
