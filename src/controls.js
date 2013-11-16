@@ -59,6 +59,7 @@ var controls = function (camera, leftBound, rightBound) {
 	}
 	
 	camera.rotation.z = player.rotation;
+	
 	camera.position.x = player.x;
 	camera.position.y = player.y;
 	camera.position.z = player.z;

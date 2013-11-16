@@ -20,6 +20,7 @@ var player = {
 	braking:false,
 	flipping:false,
 	flipDirection:"",
+	lastFlipDirection:"",
 	inverted:false,
 	
 	
@@ -76,13 +77,13 @@ var player = {
 	
 	applyRoll : function() {
 		if (this.flipping) {
-			if (this.flipDirection == "right") {
+			if (this.flipDirection == "left") {
 				if(!this.inverted) {
 					
-						if (this.flipRotation < Math.PI*2 && this.flipRotation >= Math.PI) {
-							this.flipRotation += this.flipRollSpeed;
-							if (this.flipRotation > Math.PI*2) this.flipRotation = 0;
-						} 
+					if (this.flipRotation < Math.PI*2 && this.flipRotation >= Math.PI) {
+						this.flipRotation += this.flipRollSpeed;
+						if (this.flipRotation > Math.PI*2) this.flipRotation = 0;
+					} 
 					
 				} else {
 					if (this.flipRotation < Math.PI) {
@@ -91,8 +92,21 @@ var player = {
 					} 
 				}
 			}	
-			else if (this.flipDirection == "left") {
+			else if (this.flipDirection == "right") {
 				
+				if(!this.inverted) {
+					
+					if (this.flipRotation > -Math.PI*2 && this.flipRotation <= -Math.PI) {
+						this.flipRotation -= this.flipRollSpeed;
+						if (this.flipRotation <= -Math.PI*2) this.flipRotation = 0;
+					} 
+					
+				} else {
+					if (this.flipRotation > -Math.PI) {
+						this.flipRotation -= this.flipRollSpeed;
+						if (this.flipRotation < -Math.PI) this.flipRotation = -Math.PI;
+					} 
+				}
 			}
 			/*
 			if (this.flipRotation < Math.PI) {
@@ -120,8 +134,13 @@ var player = {
 	},
 	
 	flip : function(direction) {
-		this.flipDirection = direction;
 		if (this.flipCharge >= 100) {
+			this.lastFlipDirection = this.flipDirection;
+			this.flipDirection = direction;
+			
+			if (this.lastFlipDirection != '' && this.lastFlipDirection != this.flipDirection) {
+				this.flipRotation *= -1;
+			}
 			this.flipping = true;
 			this.flipCharge = 0;
 			if(this.y > 0) {
