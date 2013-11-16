@@ -1,6 +1,7 @@
 var cameraVX = 0;
 var cameraVY = 0;
 var cameraDrag = 0.96;
+
 var sinceLeftDown = 0;
 var sinceRightDown = 0;
 var wasLeftDown = false;
