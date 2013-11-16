@@ -1,38 +1,39 @@
+var cameraVX = 0;
+var cameraVY = 0;
+var cameraDrag = 0.96;
+
 var controls = function (camera) {
 	var scrollSpeed = 5;
-	var cameraVX = 0;
-	var cameraVY = 0;
-	var cameraAccel = 5;
-	var cameraMaxVelocity = 0.25;
+	
+	var cameraAccel = 0.3;
+	var cameraMaxVelocity = 6;
 	var cameraMinAltitude = 3;
 	var rollSpeed = 0.03;
-	var maxRoll = 0.7;
+	var rollResetSpeed = 0.02;
+	var maxRoll = 0.5;
 	
 	if (Key.isDown(Key.LEFT)) {
 		cameraVX -= cameraAccel;
 		if (cameraVX < -cameraMaxVelocity) cameraVX = -cameraMaxVelocity;
-		camera.rotation.z += rollSpeed;
-		console.log(camera.rotation.z);
-		if (camera.rotation.z > maxRoll) camera.rotation.z = maxRoll;
-	} else {
-		if (camera.rotation.z > 0) camera.rotation.z -= rollSpeed;
-		if (cameraVX < 0 ) {
-			cameraVX += cameraAccel;
-			if (cameraVX > 0) cameraVX = 0;
-		}
-	}
-
+		
+	} 
 	if (Key.isDown(Key.RIGHT)) {
 		cameraVX += cameraAccel;
 		if (cameraVX > cameraMaxVelocity) cameraVX = cameraMaxVelocity;
-		//camera.rotation.z -= rollSpeed;
-	} else {
-		if (camera.rotation.z < 0) camera.rotation.z += rollSpeed;
-		if (cameraVX > 0 ) {
-			//cameraVX -= cameraAccel;
-			if (cameraVX < 0) cameraVX = 0;
-		}
-	}	
+		
+	} 
+	
+	
+	cameraVX *= cameraDrag;
+	if (Math.abs(cameraVX) < .01) cameraVX = 0;
+	
+	
+	var newRotation = -cameraVX * 0.1;
+	if (newRotation < -maxRoll) newRotation = -maxRoll;
+	else if (newRotation > maxRoll) newRotation = maxRoll;
+	
+	
+	camera.rotation.z  = newRotation;
 
 	var adjustedScroll = scrollSpeed;
 
