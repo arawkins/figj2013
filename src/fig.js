@@ -88,7 +88,6 @@ function render() {
 			if (frameCounter > 1) { // dunno why, but rays collide during frame 1
 				collision();
 			}
-			//appendText(" Hit ");
 		}
 	}
 
