@@ -49,26 +49,25 @@ var ship = makeShip();
 ship.position.set(30, 30, camera.position.z - 200)
 scene.add(ship);
 
-	
 // FLOOR
-	var floorTexture = new THREE.ImageUtils.loadTexture( 'gfx/checkerboard.png' );
-	floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
-	floorTexture.repeat.set( 10, 10 );
-	var floorMaterial = new THREE.MeshBasicMaterial( { map: floorTexture, side: THREE.DoubleSide } );
-	var floorGeometry = new THREE.PlaneGeometry(500, 1000, 10, 10);
-	var floor = new THREE.Mesh(floorGeometry, floorMaterial);
-	var floor2 = new THREE.Mesh(floorGeometry, floorMaterial);
-	var floorHalfHeight = floor.geometry.height/2;
-	var floorHalfWidth = floor.geometry.width/2;
-	floor.position.y = 0;
-	floor.rotation.x = Math.PI / 2;
-	
-	floor2.position.y = floor.position.y;
-	floor2.rotation.x = floor.rotation.x;
-	floor2.position.z = -floor.geometry.height;
-	
-	scene.add(floor);
-	scene.add(floor2);
+var floorTexture = new THREE.ImageUtils.loadTexture( 'gfx/checkerboard.png' );
+floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
+floorTexture.repeat.set( 10, 10 );
+var floorMaterial = new THREE.MeshBasicMaterial( { map: floorTexture, side: THREE.DoubleSide } );
+var floorGeometry = new THREE.PlaneGeometry(500, 1000, 10, 10);
+var floor = new THREE.Mesh(floorGeometry, floorMaterial);
+var floor2 = new THREE.Mesh(floorGeometry, floorMaterial);
+var floorHalfHeight = floor.geometry.height/2;
+var floorHalfWidth = floor.geometry.width/2;
+floor.position.y = 0;
+floor.rotation.x = Math.PI / 2;
+
+floor2.position.y = floor.position.y;
+floor2.rotation.x = floor.rotation.x;
+floor2.position.z = -floor.geometry.height;
+
+scene.add(floor);
+scene.add(floor2);
 	
 function init() {
 	player.init();
