@@ -4,7 +4,6 @@ var player = {
 	z:0,
 	vx:0,
 	vy:0,
-	vz:0,
 	speed:5,
 	thrusterSpeed:5,
 	rotation:0,
@@ -30,12 +29,12 @@ var player = {
 	
 	applyRoll : function() {
 		this.rotation = -this.vx * 0.03;
-		if (this.rotation < -maxRotation) this.rotation = -maxRotation;
-		else if (this.rotation > maxRotation) this.rotation = maxRotation;
+		if (this.rotation < -this.maxRotation) this.rotation = -this.maxRotation;
+		else if (this.rotation > this.maxRotation) this.rotation = this.maxRotation;
 	},
 	
 	update : function () {
-		this.x += vx;
-		this.z += speed;
+		this.x += this.vx;
+		this.z -= this.speed;
 	}
 }
