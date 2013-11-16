@@ -7,15 +7,6 @@ var renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
-var scrollSpeed = 0.5;
-var cameraVX = 0;
-var cameraVY = 0;
-var cameraAccel = 0.05;
-var cameraMaxVelocity = 0.25;
-var cameraMinAltitude = 3;
-var rollSpeed = 0.01;
-
-
 	
 // FLOOR
 	var floorTexture = new THREE.ImageUtils.loadTexture( 'gfx/checkerboard.png' );
@@ -41,43 +32,9 @@ function init() {
 }
 
 function render() {
-	
-	if (Key.isDown(Key.LEFT)) {
-		cameraVX -= cameraAccel;
-		if (cameraVX < -cameraMaxVelocity) cameraVX = -cameraMaxVelocity;
-		//camera.rotation.z += rollSpeed;
-	} else {
-		if (camera.rotation.z > 0) camera.rotation.z -= rollSpeed;
-		if (cameraVX < 0 ) {
-			cameraVX += cameraAccel;
-			if (cameraVX > 0) cameraVX = 0;
-		}
-	}
-	
-	if (Key.isDown(Key.RIGHT)) {
-		cameraVX += cameraAccel;
-		if (cameraVX > cameraMaxVelocity) cameraVX = cameraMaxVelocity;
-		//camera.rotation.z -= rollSpeed;
-	} else {
-		if (camera.rotation.z < 0) camera.rotation.z += rollSpeed;
-		if (cameraVX > 0 ) {
-			//cameraVX -= cameraAccel;
-			if (cameraVX < 0) cameraVX = 0;
-		}
-	}	
-	
-	var adjustedScroll = scrollSpeed;
-	
-	if (Key.isDown(Key.UP)) {
-		adjustedScroll *= 2;
-	} 
-	if (Key.isDown(Key.DOWN)) {
-		adjustedScroll /=2 ;
-	} 
-	
 
-	camera.position.z -= adjustedScroll;
-	camera.position.x += cameraVX;
+	controls(camera);
+
 	/*
 	var frontLeftCube = grid[grid.length-1][0];
 	if (frontLeftCube.position.z > camera.position.z) {
