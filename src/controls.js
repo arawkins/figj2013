@@ -3,21 +3,20 @@ var sinceRightDown = 0;
 var wasLeftDown = false;
 var wasRightDown = false;
 var doubleTapThreshold = 10;
+var flipThreshold = 50;
 
-var flip = function (camera, direction) {
-	
-}
 
 var controls = function (camera, leftBound, rightBound) {
 	
 	if (Key.isDown(Key.LEFT)) {
 		if (sinceLeftDown > 0 && sinceLeftDown < doubleTapThreshold) {
-			console.log("DOUBLE LEFT");
+			player.flip("left");
 		}
 		sinceLeftDown = 0;
 		wasLeftDown = true;
 		
-		player.turnLeft();
+		if(player.inverted) player.turnRight();
+		else player.turnLeft();
 		
 	} else if (wasLeftDown) {
 		sinceLeftDown++;
@@ -25,12 +24,13 @@ var controls = function (camera, leftBound, rightBound) {
 	
 	if (Key.isDown(Key.RIGHT)) {
 		if (sinceRightDown > 0 && sinceRightDown < doubleTapThreshold) {
-			console.log("DOUBLE RIGHT");
+			player.flip("right");
 		}
 		sinceRightDown = 0;
 		wasRightDown= true;
 		
-		player.turnRight();
+		if (player.inverted) player.turnLeft();
+		else player.turnRight();
 		
 	} else if(wasRightDown) {
 		sinceRightDown++;
@@ -52,12 +52,15 @@ var controls = function (camera, leftBound, rightBound) {
 	
 	
 	player.update();
-	if(player.x < leftBound) player.x = leftBound;
-	else if (player.x > rightBound) player.x = rightBound;
 	
+	if (!player.flipping) {
+		if(player.x < leftBound) player.x = leftBound;
+		else if (player.x > rightBound) player.x = rightBound;
+	}
 	
 	camera.rotation.z = player.rotation;
 	camera.position.x = player.x;
+	camera.position.y = player.y;
 	camera.position.z = player.z;
 	
 };

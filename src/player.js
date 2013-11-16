@@ -5,6 +5,11 @@ var player = {
 	vx:0,
 	vy:0,
 	speed:5,
+	startingAltitude:35,
+	flipSpeed:3,
+	flipRollSpeed:0.17453292519943295769236907684886,
+	flipCharge:0,
+	flipRotation:0,
 	boostSpeed:5,
 	rotation:0,
 	maxRotation:0.5,
@@ -13,11 +18,16 @@ var player = {
 	drift:0.96,
 	boosting:false,
 	braking:false,
+	flipping:false,
+	flipDirection:"",
+	inverted:false,
+	
 	
 	init : function() {
 		this.vz = this.speed;
 		this.x = 30;
-		this.y = 25;
+		this.y = this.startingAltitude;
+		this.flipCharge = 100;
 	},
 	
 	turnLeft : function() {
@@ -65,15 +75,95 @@ var player = {
 	},
 	
 	applyRoll : function() {
-		this.rotation = -this.vx * 0.03;
-		if (this.rotation < -this.maxRotation) this.rotation = -this.maxRotation;
-		else if (this.rotation > this.maxRotation) this.rotation = this.maxRotation;
+		if (this.flipping) {
+			if (this.flipDirection == "right") {
+				if(!this.inverted) {
+					
+						if (this.flipRotation < Math.PI*2 && this.flipRotation >= Math.PI) {
+							this.flipRotation += this.flipRollSpeed;
+							if (this.flipRotation > Math.PI*2) this.flipRotation = 0;
+						} 
+					
+				} else {
+					if (this.flipRotation < Math.PI) {
+						this.flipRotation += this.flipRollSpeed;
+						if (this.flipRotation > Math.PI) this.flipRotation = Math.PI;
+					} 
+				}
+			}	
+			else if (this.flipDirection == "left") {
+				
+			}
+			/*
+			if (this.flipRotation < Math.PI) {
+				this.flipRotation += this.flipRollSpeed;
+				if (this.flipRotation > Math.PI) this.flipRotation = Math.PI;
+			} 
+			/*else if (this.flipDirection == "left" && this.rotation != -Math.PI) {
+				this.rotation -= 0.2;
+				if (this.rotation < -Math.PI) this.rotation = -Math.PI;
+			}*/
+		} 
+		var turnAngle = -this.vx * 0.03;
+		if (this.inverted) turnAngle *= -1;
+		
+		this.rotation = turnAngle + this.flipRotation;
+		//if (this.rotation < -this.maxRotation) this.rotation = -this.maxRotation;
+		//else if (this.rotation > this.maxRotation) this.rotation = this.maxRotation;
+	
+		
+		/*
+		if (this.inverted && ! this.flipping) {
+			this.rotation += Math.PI;
+		}*/
+		
+	},
+	
+	flip : function(direction) {
+		this.flipDirection = direction;
+		if (this.flipCharge >= 100) {
+			this.flipping = true;
+			this.flipCharge = 0;
+			if(this.y > 0) {
+				this.vy = -this.flipSpeed;
+				this.inverted = true;
+			} else if (this.y < 0) {
+				this.vy = this.flipSpeed;
+				this.inverted = false;
+			}
+			
+		}
+		/*
+		if (this.vx > 0 ) {
+			this.vx = this.flipSpeed * 2;
+		}
+		*/
+		
+	},
+	
+	stopFlipping:function () {
+		this.flipping = false;
+		this.vy = 0;
+		if (this.y < 0) this.y = -this.startingAltitude;
+		else this.y = this.startingAltitude;
 	},
 	
 	update : function () {
 		this.applyDrift();
 		this.applyRoll();
 		this.x += this.vx;
+		this.y += this.vy;
+		
+		if(this.flipping) {
+			//this.rotation += this.flipRollSpeed;
+			if ( (this.vy < 0 && this.y < -this.startingAltitude) || (this.vy > 0 && this.y > this.startingAltitude)) {
+				this.stopFlipping();
+			}
+		} else {
+			if (this.flipCharge < 100) {
+				this.flipCharge ++;
+			}
+		}
 		this.z -= this.vz;
 	}
 }

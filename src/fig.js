@@ -40,7 +40,7 @@ scene.add( cube );
 	var floor2 = new THREE.Mesh(floorGeometry, floorMaterial);
 	var floorHalfHeight = floor.geometry.height/2;
 	var floorHalfWidth = floor.geometry.width/2;
-	floor.position.y = -20;
+	floor.position.y = 0;
 	floor.rotation.x = Math.PI / 2;
 	
 	floor2.position.y = floor.position.y;
