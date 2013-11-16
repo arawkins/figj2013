@@ -10,7 +10,7 @@ var renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
-var cube = objects.makeCube({x:100,y:100,z:100});
+var cube = objects.makeCube({x:100, y:100, z:100});
 cube.position.set(-60, 60, camera.position.z - 1900);
 scene.add(cube);
 collidableMeshList.push(cube);
