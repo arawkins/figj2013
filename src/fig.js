@@ -13,7 +13,6 @@ document.body.appendChild( renderer.domElement );
 
 // Cube idea
 function makeCube(dimensions) {
-	console.log('makeCube')
 	var cube;
 	// Create an array of materials to be used in a cube, one for each side
 	var cubeMaterialArray = [];
@@ -27,7 +26,6 @@ function makeCube(dimensions) {
 	var cubeMaterials = new THREE.MeshFaceMaterial( cubeMaterialArray );
 	// Cube parameters: width (x), height (y), depth (z),
 	//        (optional) segments along x, segments along y, segments along z
-	console.log(dimensions)
 	var cubeGeometry = new THREE.CubeGeometry( dimensions.x, dimensions.y, dimensions.z, 1, 1, 1 );
 	// using THREE.MeshFaceMaterial() in the constructor below
 	//   causes the mesh to use the materials stored in the geometry
@@ -36,7 +34,6 @@ function makeCube(dimensions) {
 }
 
 function makeShip() {
-	console.log('makeShip')
 	return makeCube({x: 20, y: 10, z: 30});
 };
 
