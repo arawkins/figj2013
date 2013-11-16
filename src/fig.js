@@ -74,9 +74,6 @@ function render() {
 		floor2.position.z -= floor2.geometry.height*2;
 	}
 
-	// camera box / ship
-	//ship.position.set(camera.position.x, camera.position.y - 25, camera.position.z - 120);
-
 	var originPoint = ship.position.clone();
 
 	for (var vertexIndex = 0; vertexIndex < ship.geometry.vertices.length; vertexIndex++)
