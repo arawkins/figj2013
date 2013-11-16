@@ -42,13 +42,10 @@ scene.add(floor2);
 function init() {
 	player.init();
 	
-	camera.position.z = player.x;
-	camera.position.y = player.y;
 	window.addEventListener('keyup', function(event) { Key.onKeyup(event); }, false);
 	window.addEventListener('keydown', function(event) { Key.onKeydown(event); }, false);
 	
 	animloop();
-	
 }
 
 function animloop() {
