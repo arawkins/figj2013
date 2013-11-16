@@ -190,9 +190,8 @@ var player = {
 		this.applyRoll();
 		this.x += this.vx;
 		this.y += this.vy;
-		
-		//if (this.y > this.maxAltitude) this.y = this.maxAltutide;
-		//else if (this.y < this.minAltitude) this.y = this.minAltitude;
+		if (this.y > this.maxAltitude) this.y = this.maxAltitude;
+		else if (this.y < this.minAltitude) this.y = this.minAltitude;
 		
 		if(this.flipping) {
 			//this.rotation += this.flipRollSpeed;
