@@ -24,9 +24,9 @@ scene.add(ship);
 // FLOOR
 var floorTexture = new THREE.ImageUtils.loadTexture( 'gfx/checkerboard.png' );
 floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
-floorTexture.repeat.set( 10, 10 );
+floorTexture.repeat.set( 20, 20 );
 var floorMaterial = new THREE.MeshBasicMaterial( { map: floorTexture, side: THREE.DoubleSide } );
-var floorGeometry = new THREE.PlaneGeometry(500, 3000, 10, 10);
+var floorGeometry = new THREE.PlaneGeometry(3000, 3000, 10, 10);
 var floor = new THREE.Mesh(floorGeometry, floorMaterial);
 var floor2 = new THREE.Mesh(floorGeometry, floorMaterial);
 var floorHalfHeight = floor.geometry.height/2;

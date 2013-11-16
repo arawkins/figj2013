@@ -4,17 +4,19 @@ var player = {
 	z:0,
 	vx:0,
 	vy:0,
-	speed:5,
-	startingAltitude:35,
+	speed:25,
+	startingAltitude:55,
+	maxAltitude:575,
+	minAltitude:30,
 	flipSpeed:3,
 	flipRollSpeed:0.17453292519943295769236907684886,
 	flipCharge:0,
 	flipRotation:0,
 	boostSpeed:5,
 	rotation:0,
-	maxRotation:0.5,
+	maxRotation:1,
 	turnSpeed:0.6,
-	maxTurnSpeed:10,
+	maxTurnSpeed:15,
 	drift:0.96,
 	boosting:false,
 	braking:false,
@@ -33,12 +35,21 @@ var player = {
 	
 	turnLeft : function() {
 		this.vx -= this.turnSpeed;
-		if (this.vx < -this.maxTurnSpeed) this.vx = -this.maxTurnSpeed;
+		if (this.vx < -this.maxTurnSpeed*2) this.vx = -this.maxTurnSpeed*2;
 	},
 	
 	turnRight : function() {
 		this.vx += this.turnSpeed;
-		if (this.vx > this.maxTurnSpeed) this.vx = this.maxTurnSpeed;
+		if (this.vx > this.maxTurnSpeed*2) this.vx = this.maxTurnSpeed*2;
+	},
+	moveUp:function () {
+		this.vy += this.turnSpeed;
+		if (this.vy > this.maxTurnSpeed) this.vy = this.maxTurnSpeed;
+	},
+	
+	moveDown:function() {
+		this.vy -= this.turnSpeed;
+		if (this.vy < -this.maxTurnSpeed) this.vy = -this.maxTurnSpeed;
 	},
 	
 	boost : function() {
@@ -73,6 +84,9 @@ var player = {
 	applyDrift : function() {
 		this.vx *= this.drift;
 		if (Math.abs(this.vx) < .01) this.vx = 0;
+		
+		this.vy *= this.drift;
+		if (Math.abs(this.vy) < .01) this.vy = 0;
 	},
 	
 	applyRoll : function() {
@@ -173,6 +187,9 @@ var player = {
 		this.applyRoll();
 		this.x += this.vx;
 		this.y += this.vy;
+		
+		//if (this.y > this.maxAltitude) this.y = this.maxAltutide;
+		//else if (this.y < this.minAltitude) this.y = this.minAltitude;
 		
 		if(this.flipping) {
 			//this.rotation += this.flipRollSpeed;
