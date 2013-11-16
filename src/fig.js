@@ -87,6 +87,10 @@ function animloop() {
 	render();
 }
 
+function collision() {
+	console.log(" Hit ", frameCounter);
+}
+
 function render() {
 	frameCounter++;
 
@@ -119,7 +123,7 @@ function render() {
 		var collisionResults = ray.intersectObjects( collidableMeshList );
 		if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() ) {
 			if (frameCounter > 1) { // dunno why, but rays collide during frame 1
-				console.log(" Hit ", frameCounter);
+				collision();
 			}
 			//appendText(" Hit ");
 		}
