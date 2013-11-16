@@ -62,9 +62,12 @@ function collision() {
 
 function render() {
 	frameCounter++;
-
-	controls(camera, -floorHalfWidth, floorHalfWidth, ship);
-
+	
+	if(!player.dead) {
+		controls(camera, -floorHalfWidth, floorHalfWidth, ship);
+	} else {
+		console.log("play again?");
+	}
 	if (floor.position.z- floorHalfHeight > camera.position.z) {
 		floor.position.z -= floor.geometry.height*2;
 	}

@@ -4,6 +4,7 @@ var player = {
 	z:0,
 	vx:0,
 	vy:0,
+	vz:0,
 	speed:25,
 	startingAltitude:55,
 	maxAltitude:575,
@@ -24,6 +25,7 @@ var player = {
 	flipDirection:"",
 	lastFlipDirection:"",
 	inverted:false,
+	dead:false,
 	
 	
 	init : function() {
@@ -31,6 +33,7 @@ var player = {
 		this.x = 30;
 		this.y = this.startingAltitude;
 		this.flipCharge = 100;
+		
 	},
 	
 	turnLeft : function() {
@@ -206,9 +209,10 @@ var player = {
 
 	crash: function () {
 		console.log('i am now a dead pilot');
-		this.speed = 0;
+		//this.speed = 0;
 		this.boostSpeed = 0;
 		this.vx = this.vy = 0;
-		this.turnSpeed = 0;
+		//this.turnSpeed = 0;
+		this.dead = true;
 	}
 }
