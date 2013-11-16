@@ -1,7 +1,3 @@
-var cameraVX = 0;
-var cameraVY = 0;
-var cameraDrag = 0.96;
-
 var sinceLeftDown = 0;
 var sinceRightDown = 0;
 var wasLeftDown = false;
@@ -13,15 +9,6 @@ var flip = function (camera, direction) {
 }
 
 var controls = function (camera, leftBound, rightBound) {
-	var scrollSpeed = 5;
-	var cameraAccel = 0.6;
-	var cameraMaxVelocity = 10;
-	var cameraMinAltitude = 3;
-	var rollSpeed = 0.03;
-	var rollResetSpeed = 0.02;
-	var maxRoll = 0.5;
-	
-	
 	
 	if (Key.isDown(Key.LEFT)) {
 		if (sinceLeftDown > 0 && sinceLeftDown < doubleTapThreshold) {
@@ -30,12 +17,7 @@ var controls = function (camera, leftBound, rightBound) {
 		sinceLeftDown = 0;
 		wasLeftDown = true;
 		
-		//player.vx -= player.turnSpeed;
 		player.turnLeft();
-		
-		//cameraVX -= cameraAccel;
-		//if (cameraVX < -cameraMaxVelocity) cameraVX = -cameraMaxVelocity;
-		
 		
 	} else if (wasLeftDown) {
 		sinceLeftDown++;
@@ -49,43 +31,33 @@ var controls = function (camera, leftBound, rightBound) {
 		wasRightDown= true;
 		
 		player.turnRight();
-		//cameraVX += cameraAccel;
-		//if (cameraVX > cameraMaxVelocity) cameraVX = cameraMaxVelocity;
 		
 	} else if(wasRightDown) {
 		sinceRightDown++;
 	}
 	
-	player.applyDrift();
-	//cameraVX *= cameraDrag;
-	//if (Math.abs(cameraVX) < .01) cameraVX = 0;
 	
 	
-	player.applyRoll();
-	//var newRotation = -cameraVX * 0.03;
-	//if (newRotation < -maxRoll) newRotation = -maxRoll;
-	//else if (newRotation > maxRoll) newRotation = maxRoll;
+	if (Key.isDown(Key.UP)) {
+		player.boost();
+	} else {
+		player.stopBoosting();
+	}
+	
+	if (Key.isDown(Key.DOWN)) {
+		player.brake();
+	} else {
+		player.stopBraking();
+	}
 	
 	
-	//camera.rotation.z  = newRotation;
+	player.update();
+	if(player.x < leftBound) player.x = leftBound;
+	else if (player.x > rightBound) player.x = rightBound;
+	
 	
 	camera.rotation.z = player.rotation;
-	
-	var adjustedScroll = player.speed;
-	/*
-	if (Key.isDown(Key.UP)) {
-		adjustedScroll *= 2;
-	}
-	if (Key.isDown(Key.DOWN)) {
-		adjustedScroll /=2 ;
-	}
-	*/
-	player.update();
 	camera.position.x = player.x;
 	camera.position.z = player.z;
-	//camera.position.z -= adjustedScroll;
 	
-	
-	if(camera.position.x < leftBound) camera.position.x = leftBound;
-	else if (camera.position.x > rightBound) camera.position.x = rightBound;
 };
