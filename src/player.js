@@ -185,5 +185,9 @@ var player = {
 			}
 		}
 		this.z -= this.vz;
+	},
+
+	crash: function () {
+		console.log('i am now a dead pilot');
 	}
 }
