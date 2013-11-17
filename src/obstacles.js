@@ -108,8 +108,8 @@ var obstacles = (function () {
 	function increaseDifficulty() {
 		difficulty++;
 		if (difficulty >= 7) cubeFrequency -= 1;
-		else cubeFrequency -= 3;
-		if (cubeFrequency < 5) cubeFrequency = 5;
+		else cubeFrequency -= 4;
+		if (cubeFrequency < 4) cubeFrequency = 4;
 		
 		
 	}
@@ -149,7 +149,7 @@ var obstacles = (function () {
 			cube = oldCubes.pop();
 			
 		} else { 		
-			cube = objects.makeCube({x:getRandomInt(120,800), y:getRandomInt(120,800), z:getRandomInt(120,400)});
+			cube = objects.makeCube({x:getRandomInt(175,1000), y:getRandomInt(175,850), z:getRandomInt(120,400)});
 			
 		}
 		var vLimit = difficulty;

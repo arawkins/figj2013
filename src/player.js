@@ -69,8 +69,8 @@ var player = {
 		if (this.vz > this.maxSpeed) this.vz = this.maxSpeed;
 		
 		if(this.difficulty <= 9) {
-			var up = 0.15;
-			var maxUp = 0.5;
+			var up = 0.1;
+			var maxUp = 0.3;
 			
 			this.turnSpeed += up;
 			this.maxTurnSpeed += maxUp;

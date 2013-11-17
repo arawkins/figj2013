@@ -32,7 +32,7 @@ window.onload = function () {
 
   objects.loadGems();
   var difficultyTimer = 0;
-  var difficultyThreshold = 1800;
+  var difficultyThreshold = 1200;
   //var difficultyThreshold = 180;
   var bullets = [];
   var usedBullets = [];
@@ -135,7 +135,7 @@ window.onload = function () {
     spaceship.rotation.y += Math.PI;
     scene.add( spaceship );
     spaceship.position.z = -500;
-    particles.init(scene, camera, spaceship);
+    //particles.init(scene, camera, spaceship);
   }
 
 
@@ -326,7 +326,7 @@ window.onload = function () {
     };
 	
     obstacles.tick();
-    particles.tick();
+    //particles.tick();
 
   }
 
