@@ -15,7 +15,7 @@ cube.position.set(-60, 60, camera.position.z - 1900);
 scene.add(cube);
 collidableMeshList.push(cube);
 
-//obstacles
+obstacles.init(scene);
 
 var ship = objects.makeShip();
 ship.position.set(30, 30, camera.position.z - 200)
@@ -163,6 +163,9 @@ function render() {
 			}
 		}
 	}
+	obstacles.collide(ship);
+	//obstacles.collide(laser);
+	obstacles.tick();
 
 	renderer.render(scene, camera);
 }
