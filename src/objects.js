@@ -1,6 +1,103 @@
 var objects = (function () {
+	
+	var gems = [];
+	
+	var bluegemMaterial;
+	var bluegemGeometry;
+
+	var redgemMaterial;
+	var redgemGeometry;
+
+	var greengemMaterial;
+	var greengemGeometry;
+
+	var whitegemMaterial;
+	var whitegemGeometry;
+	
+	function loadGems() {
+		var jsonLoader = new THREE.JSONLoader();
+		jsonLoader.load( "models/bluegem.js", addBlueGem );
+		jsonLoader.load( "models/greengem.js", addWhiteGem);
+		jsonLoader.load( "models/redgem.js", addRedGem);
+		jsonLoader.load( "models/whitegem.js", addWhiteGem);
+
+		
+	}
+	
+	function addBlueGem(geometry, materials) {
+		bluegemMaterial = new THREE.MeshFaceMaterial( materials );
+		bluegemGeometry = geometry;
+		gems["blue"] = new THREE.Mesh( bluegemGeometry, bluegemMaterial );
+	}
+
+	function addGreenGem(geometry, materials) {
+		greengemMaterial = new THREE.MeshFaceMaterial( materials );
+		greengemGeometry = geometry;
+		gems["green"] = new THREE.Mesh( greengemGeometry, greengemMaterial );
+	}
 
 
+	function addRedGem(geometry, materials) {
+		redgemMaterial = new THREE.MeshFaceMaterial( materials );
+		redgemGeometry = geometry;
+		gems["red"] = new THREE.Mesh( redgemGeometry, redgemMaterial );
+	}
+
+	function addWhiteGem(geometry, materials) {
+		whitegemMaterial = new THREE.MeshFaceMaterial( materials );
+		whitegemGeometry = geometry;
+		gems["white"] = new THREE.Mesh( whitegemGeometry, whitegemMaterial );
+	}
+	
+	function makeGem(color) {
+		var gem = gems[color];
+		
+		gem.scale.set(50,50,50);
+		return gem;
+		
+		/*
+		var material;
+		var geometry;
+		var value;
+		
+		switch(color) {
+		
+			
+			
+			case "green":
+			material = greengemMaterial;
+			geometry = greengemGeometry;
+			value = 250;
+			break;
+			
+			case "red":
+			material = redgemMaterial;
+			geometry = redgemGeometry;
+			value = 500;
+			break;
+			
+			case "white":
+			material = whitegemMaterial;
+			geometry = whitegemGeometry;
+			value = 1000;
+			break;
+			
+			case "blue":
+			material = bluegemMaterial;
+			geometry = bluegemGeometry;
+			value = 100;
+			break;
+			
+		}
+		
+		
+		gem = new THREE.Mesh( geometry, material );
+		gem.scale.set(50,50,50);
+		return gem;
+		*/
+	}
+	
+	
 	// Cube idea
 	function makeCube(dimensions) {
 		var cube;
@@ -40,7 +137,9 @@ var objects = (function () {
 	return {
 		makeShip: makeShip,
 		makeCube: makeCube,
-		makeBullet: makeBullet
+		makeBullet: makeBullet,
+		loadGems : loadGems,
+		makeGem : makeGem
 	};
 
 })()

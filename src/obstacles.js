@@ -17,6 +17,10 @@ var obstacles = (function () {
 	var baseCubeFrequency = 30;
 	var cubeFrequency = 30;
 	
+	var gemFrequency = 300;
+	var gemCounter = 0;
+	
+	
 	function init(_scene, _camera, _leftBound, _rightBound) {
 		scene = _scene;
 		camera = _camera;
@@ -52,6 +56,12 @@ var obstacles = (function () {
 				scene.remove(thisCube);
 				oldCubes.push(thisCube);
 			}
+		}
+		
+		gemCounter++;
+		if(gemCounter > gemThreshold) {
+			gemCounter = 0;
+			
 		}
 		
 	};

@@ -29,7 +29,7 @@ gameOver.position.set( window.innerWidth/2, window.innerHeight/2, 0 );
 gameOver.scale.set( 1024, 256, 1.0 ); // imageWidth, imageHeight
 //scene.add( gameOver );
 
-
+objects.loadGems();
 var difficultyTimer = 0;
 var difficultyThreshold = 1800;
 var bullets = [];
@@ -112,22 +112,7 @@ scene.add( skybox );
 //    to e.g. "colorAmbient" : [0.75, 0.75, 0.75]
 var jsonLoader = new THREE.JSONLoader();
 jsonLoader.load( "models/spaceship.js", addShipToScene );
-jsonLoader.load( "models/bluegem.js", addBlueGem );
-jsonLoader.load( "models/greengem.js", addWhiteGem);
-jsonLoader.load( "models/redgem.js", addRedGem);
-jsonLoader.load( "models/whitegem.js", addWhiteGem);
 
-var bluegemMaterial;
-var bluegemGeometry;
-
-var redgemMaterial;
-var redgemGeometry;
-
-var greengemMaterial;
-var greengemGeometry;
-
-var whitegemMaterial;
-var whitegemGeometry;
 
 
 
@@ -142,26 +127,6 @@ function addShipToScene( geometry, materials )
 	spaceship.position.z = -500;
 }
 
-function addBlueGem(geometry, materials) {
-	bluegemMaterial = new THREE.MeshFaceMaterial( materials );
-	bluegemGeometry = geometry;
-}
-
-function addGreenGem(geometry, materials) {
-	greengemMaterial = new THREE.MeshFaceMaterial( materials );
-	greengemGeometry = geometry;
-}
-
-
-function addRedGem(geometry, materials) {
-	redgemMaterial = new THREE.MeshFaceMaterial( materials );
-	redgemGeometry = geometry;
-}
-
-function addWhiteGem(geometry, materials) {
-	whitegemMaterial = new THREE.MeshFaceMaterial( materials );
-	whitegemGeometry = geometry;
-}
 
 function addGemToScene(geometry, materials) {
 	var material = new THREE.MeshFaceMaterial( materials );
