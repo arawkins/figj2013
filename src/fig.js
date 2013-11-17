@@ -10,7 +10,7 @@ var crosshair;
 var crosshairVisible = false;
 var crosshairPositions = [];
 
-var renderer = new THREE.WebGLRenderer();
+var renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
