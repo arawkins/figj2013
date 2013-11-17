@@ -10,6 +10,11 @@ var cameraOffsetZ = 120;
 
 
 var controls = function (camera, leftBound, rightBound, playerMesh) {
+
+	if (!playerMesh) {
+		console.log('TODO: wait for ship mesh to download');
+		return;
+	}
 	
 	if (Key.isDown(Key.LEFT)) {
 		/*
