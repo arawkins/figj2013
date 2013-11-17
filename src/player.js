@@ -5,7 +5,8 @@ var player = {
 	vx:0,
 	vy:0,
 	vz:0,
-	speed:25,
+	speed:15,
+	startSpeed:15,
 	startingAltitude:55,
 	maxAltitude:575,
 	minAltitude:30,
@@ -29,11 +30,15 @@ var player = {
 	
 	
 	init : function() {
-		this.vz = this.speed;
 		this.x = 30;
 		this.y = this.startingAltitude;
-		this.flipCharge = 100;
-		
+		this.z = 0;
+		this.reset();
+	},
+	
+	reset : function () {
+		this.vz = this.startSpeed;
+		this.dead = false;
 	},
 	
 	turnLeft : function() {

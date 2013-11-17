@@ -8,8 +8,23 @@ var renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
-obstacles.init(scene, camera);
+var logoTexture = THREE.ImageUtils.loadTexture( 'gfx/logo.png' );
+var logoMaterial = new THREE.SpriteMaterial( { map: logoTexture, useScreenCoordinates: true, alignment: THREE.SpriteAlignment.center  } );
+var logo = new THREE.Sprite( logoMaterial );
+logo.position.set( window.innerWidth/2, window.innerHeight/2, 0 );
+logo.scale.set( 1024, 256, 1.0 ); // imageWidth, imageHeight
+scene.add( logo );
 
+var gameOverTexture = THREE.ImageUtils.loadTexture( 'gfx/gameOver.png' );
+var gameOverMaterial = new THREE.SpriteMaterial( { map: gameOverTexture, useScreenCoordinates: true, alignment: THREE.SpriteAlignment.center  } );
+var gameOver = new THREE.Sprite( gameOverMaterial );
+gameOver.position.set( window.innerWidth/2, window.innerHeight/2, 0 );
+gameOver.scale.set( 1024, 256, 1.0 ); // imageWidth, imageHeight
+//scene.add( gameOver );
+
+var difficulty = 1;
+var difficultyTimer = 0;
+var difficultyThreshold = 3600;
 var bullets = [];
 var usedBullets = [];
 
@@ -35,6 +50,10 @@ floor2.receiveShadow = true;
 scene.add(floor);
 scene.add(floor2);
 
+var leftBound = -floorHalfWidth + 1000;
+var rightBound = floorHalfWidth - 1000;
+
+obstacles.init(scene, camera, leftBound, rightBound);
 
 // LIGHT
 var light = new THREE.HemisphereLight(0xFFFFFF, 0x999999,1);
@@ -120,9 +139,18 @@ function animloop() {
 	render();
 }
 
+function startGame() {
+	player.reset();
+	obstacles.reset();
+	scene.remove(logo);
+	difficulty = 1;
+	difficultyTimer = 0;
+	scene.remove(gameOver);
+}
+
 function collision() {
-	console.log(" Hit ");
 	player.crash();
+	scene.add(gameOver);
 }
 
 function shoot() {
@@ -156,10 +184,24 @@ function render() {
 	skybox.position.y = camera.position.y;
 	skybox.position.x = camera.position.x;
 	
-	//directionalLight.position.set( spaceship.position.x + 100, spaceship.position.y+550, spaceship.position.z-500 );
-	//shipMesh.position.z = player.z - 500;
+	if (!obstacles.isStarted() && Key.isDown(Key.SPACE)) {
+		
+		startGame();
+	}
+	
+	if (obstacles.isStarted()) {
+		difficultyTimer++;
+		
+		if(difficultyTimer > difficultyThreshold) {
+			difficulty++;
+			difficultyTimer = 0;
+		}
+		
+	}
+	
 	if(!player.dead) {
 		
+			
 		if(Key.isDown(Key.SPACE)) {
 			shoot();
 		}
@@ -175,10 +217,14 @@ function render() {
 			}
 		}
 		
-		controls(camera, -floorHalfWidth, floorHalfWidth, spaceship);
+		controls(camera, leftBound, rightBound, spaceship);
 	} else {
-		console.log("play again?");
-		return;
+		if(Key.isDown(Key.SPACE)) {
+			console.log('made it here');
+			startGame();
+			
+		}
+		
 	}
 	if (floor.position.z- floorHalfHeight > camera.position.z) {
 		floor.position.z -= floor.geometry.height*2;
@@ -189,8 +235,8 @@ function render() {
 	}
 
 	if (obstacles.collide(spaceship)) {
-    collision();
-  };
+		collision();
+	};
 	
 	//obstacles.collide(laser);
 	obstacles.tick();

@@ -9,15 +9,27 @@ var obstacles = (function () {
 
 	var scene;
 	var camera;
+	var leftBound;
+	var rightBound;
 	var oldCubes = [];
 	var cubes = [];
+	var started = false;
 	
-	function init(_scene, _camera) {
+	function init(_scene, _camera, _leftBound, _rightBound) {
 		scene = _scene;
 		camera = _camera;
+		leftBound = _leftBound;
+		rightBound = _rightBound;
+		started = false;
 	};
-
+	
+	function isStarted() {
+		return started;
+	}
+	
 	function tick() {
+		if (!started) return;
+		
 		frameCounter = frameCounter + 1;
 		tickCounter++;
 		if (tickCounter > 5) {
@@ -27,6 +39,8 @@ var obstacles = (function () {
 		
 		for (var i=0;i<cubes.length;i++) {
 			var thisCube = cubes[i];
+			thisCube.position.x += thisCube.vx;
+			thisCube.position.y += thisCube.vy;
 			if (thisCube.position.z > camera.position.z) {
 				cubes.splice(i,1);
 				scene.remove(thisCube);
@@ -35,6 +49,20 @@ var obstacles = (function () {
 		}
 		
 	};
+	
+	function reset() {
+		for (var i=0;i<cubes.length;i++) {
+			c = cubes.shift();
+			scene.remove(c);
+			oldCubes.push(c);
+		}
+		tickCounter = 0;
+		start();
+	}
+	
+	function start() {
+		started = true;
+	}
 
 	function addBox() {
 		
@@ -43,13 +71,16 @@ var obstacles = (function () {
 			cube = oldCubes.pop();
 		else 		
 			cube = objects.makeCube({x:getRandomInt(100,500), y:getRandomInt(50,500), z:getRandomInt(50,500)});
-			
-		var newX = getRandomInt(-2000,2000);
+		
+		cube.vx = getRandomInt (-3,3);
+		cube.vy = getRandomInt (-3,3);
+		var newX = getRandomInt(leftBound-500,rightBound+500);
 		//var newX = 0;
 		var newY = getRandomInt(0,1000);
 		var newZ = getRandomInt(-4900,-5900) + camera.position.z;
 		cube.position.set(newX, newY, newZ);
 		cube.geometry.computeBoundingBox();
+		
 		scene.add(cube);
 		//collidableMeshList.push(cube);
 		cubes.push(cube);
@@ -79,7 +110,7 @@ var obstacles = (function () {
 			if(oz < cz + bb.max.z) {
 				if(ox > cx + bb.min.x && ox < cx + bb.max.x) {
 					if(oy > cy + bb.min.y && oy < cy + bb.max.y) {
-						console.log('hit');
+						return true;
 					}
 				}
 				
@@ -119,7 +150,9 @@ var obstacles = (function () {
 	return {
 		init: init,
 		tick: tick,
-		collide: collide
+		collide: collide,
+		reset: reset,
+		isStarted: isStarted
 	};
 
 })()
