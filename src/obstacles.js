@@ -5,6 +5,7 @@ var obstacles = (function () {
 
 	var collidableMeshList = [];
 	var frameCounter = 0;
+	var tickCounter = 0;
 
 	var scene;
 	var camera;
@@ -12,15 +13,25 @@ var obstacles = (function () {
 	function init(_scene, _camera) {
 		scene = _scene;
 		camera = _camera;
-		var cube = objects.makeCube({x:100, y:100, z:100});
-		cube.position.set(-60, 60, camera.position.z - 1900);
-		scene.add(cube);
-		collidableMeshList.push(cube);
 	};
 
 	function tick() {
 		frameCounter = frameCounter + 1;
+		tickCounter++;
+		//console.log(tickCounter);
+		if (tickCounter > 100) {
+			tickCounter = 0;
+			addBox();
+		}
 	};
+
+	function addBox() {
+		console.log('addbox')
+		var cube = objects.makeCube({x:100, y:100, z:100});
+		cube.position.set(-60, 60, camera.position.z - 1900);
+		scene.add(cube);
+		collidableMeshList.push(cube);
+	}
 
 	function collide(obj) {
 		var originPoint = obj.position.clone();

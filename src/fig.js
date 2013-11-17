@@ -2,16 +2,13 @@ window.onload = function () {
 
 var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 5000 );
+var spaceship;
 
 var renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
 obstacles.init(scene, camera);
-
-var ship = objects.makeShip();
-ship.position.set(30, 30, camera.position.z - 200)
-scene.add(ship);
 
 var bullets = [];
 var usedBullets = [];
@@ -59,16 +56,15 @@ var skybox = new THREE.Mesh( skyGeometry, skyMaterial );
 
 scene.add( skybox );
 
-
-// SHIP MESH
-//var shipMesh = new PinaCollada('ship', 1);
-
+// Note: if imported model appears too dark,
+//   add an ambient light in this file
+//   and increase values in model's exported .js file
+//    to e.g. "colorAmbient" : [0.75, 0.75, 0.75]
 var jsonLoader = new THREE.JSONLoader();
 jsonLoader.load( "models/spaceship.js", addModelToScene );
 
 var ambientLight = new THREE.AmbientLight(0x111111);
 scene.add(ambientLight);	
-	
 
 
 function addModelToScene( geometry, materials ) 
@@ -82,8 +78,7 @@ function addModelToScene( geometry, materials )
 	spaceship.position.z = -500;
 }
 
-	
-	
+
 function init() {
 	player.init();
 	
@@ -163,7 +158,7 @@ function render() {
 		floor2.position.z -= floor2.geometry.height*2;
 	}
 
-	if (obstacles.collide(ship)) {
+	if (obstacles.collide(spaceship)) {
     collision();
   };
 	//obstacles.collide(laser);
