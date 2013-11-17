@@ -106,16 +106,27 @@ scene.add( skybox );
 //   and increase values in model's exported .js file
 //    to e.g. "colorAmbient" : [0.75, 0.75, 0.75]
 var jsonLoader = new THREE.JSONLoader();
-jsonLoader.load( "models/spaceship.js", addModelToScene );
+jsonLoader.load( "models/spaceship.js", addShipToScene );
+jsonLoader.load( "models/bluegem.js", addBlueGem );
+jsonLoader.load( "models/greengem.js", addWhiteGem);
+jsonLoader.load( "models/redgem.js", addRedGem);
+jsonLoader.load( "models/whitegem.js", addWhiteGem);
 
-var ambientLight = new THREE.AmbientLight(0x111111);
-scene.add(ambientLight);	
+var bluegemMaterial;
+var bluegemGeometry;
 
-//var hemiLight = new THREE.HemisphereLight(0xFFFFFF, 0xd7cbb0);
-//scene.add(hemiLight);
+var redgemMaterial;
+var redgemGeometry;
+
+var greengemMaterial;
+var greengemGeometry;
+
+var whitegemMaterial;
+var whitegemGeometry;
 
 
-function addModelToScene( geometry, materials ) 
+
+function addShipToScene( geometry, materials ) 
 {
 	var material = new THREE.MeshFaceMaterial( materials );
 	spaceship = new THREE.Mesh( geometry, material );
@@ -126,6 +137,40 @@ function addModelToScene( geometry, materials )
 	spaceship.position.z = -500;
 }
 
+function addBlueGem(geometry, materials) {
+	bluegemMaterial = new THREE.MeshFaceMaterial( materials );
+	bluegemGeometry = geometry;
+}
+
+function addGreenGem(geometry, materials) {
+	greengemMaterial = new THREE.MeshFaceMaterial( materials );
+	greengemGeometry = geometry;
+}
+
+
+function addRedGem(geometry, materials) {
+	redgemMaterial = new THREE.MeshFaceMaterial( materials );
+	redgemGeometry = geometry;
+}
+
+function addWhiteGem(geometry, materials) {
+	whitegemMaterial = new THREE.MeshFaceMaterial( materials );
+	whitegemGeometry = geometry;
+}
+
+function addGemToScene(geometry, materials) {
+	var material = new THREE.MeshFaceMaterial( materials );
+	bluegem = new THREE.Mesh( geometry, material );
+	bluegem.scale.set(50,50,50);
+	bluegem.rotation.y += Math.PI;
+	scene.add( bluegem );
+	console.log("loaded");
+	bluegem.position.z = -1500;
+	bluegem.position.y += 100;
+}
+
+var ambientLight = new THREE.AmbientLight(0x111111);
+scene.add(ambientLight);	
 
 function init() {
 	player.init();

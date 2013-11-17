@@ -57,11 +57,12 @@ var obstacles = (function () {
 	};
 	
 	function reset() {
-		for (var i=0;i<cubes.length;i++) {
-			c = cubes.shift();
+		while(cubes.length > 0) {
+			c = cubes.pop();
 			scene.remove(c);
 			oldCubes.push(c);
 		}
+		
 		tickCounter = 0;
 		cubeFrequency = baseCubeFrequency;
 		start();
