@@ -2,20 +2,12 @@ window.onload = function () {
 
 var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 5000 );
-var collidableMeshList = [];
-
-var frameCounter = 0;
 
 var renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
-var cube = objects.makeCube({x:100, y:100, z:100});
-cube.position.set(-60, 60, camera.position.z - 1900);
-scene.add(cube);
-collidableMeshList.push(cube);
-
-obstacles.init(scene);
+obstacles.init(scene, camera);
 
 var ship = objects.makeShip();
 ship.position.set(30, 30, camera.position.z - 200)
@@ -82,7 +74,7 @@ function animloop() {
 }
 
 function collision() {
-	console.log(" Hit ", frameCounter);
+	console.log(" Hit ");
 	player.crash();
 }
 
@@ -111,8 +103,6 @@ function shoot() {
 }
 
 function render() {
-	frameCounter++;
-	
 	//light.position.z = player.z;
 	//light.position.x = player.x;
 	skybox.position.z = camera.position.z;
@@ -147,23 +137,9 @@ function render() {
 		floor2.position.z -= floor2.geometry.height*2;
 	}
 
-	var originPoint = ship.position.clone();
-
-	for (var vertexIndex = 0; vertexIndex < ship.geometry.vertices.length; vertexIndex++)
-	{
-		var localVertex = ship.geometry.vertices[vertexIndex].clone();
-		var globalVertex = localVertex.applyMatrix4( ship.matrix );
-		var directionVector = globalVertex.sub( ship.position );
-
-		var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
-		var collisionResults = ray.intersectObjects( collidableMeshList );
-		if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() ) {
-			if (frameCounter > 1) { // dunno why, but rays collide during frame 1
-				collision();
-			}
-		}
-	}
-	obstacles.collide(ship);
+	if (obstacles.collide(ship)) {
+    collision();
+  };
 	//obstacles.collide(laser);
 	obstacles.tick();
 
