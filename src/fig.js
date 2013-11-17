@@ -6,10 +6,15 @@ var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 5000 );
 var spaceship;
 
+var crosshair;
+var crosshairVisible = false;
+var crosshairPositions = [];
+
 var renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
+var crateTexture = THREE.ImageUtils.loadTexture( 'gfx/crosshairs.gif' );
 var logoTexture = THREE.ImageUtils.loadTexture( 'gfx/logo.png' );
 var logoMaterial = new THREE.SpriteMaterial( { map: logoTexture, useScreenCoordinates: true, alignment: THREE.SpriteAlignment.center  } );
 var logo = new THREE.Sprite( logoMaterial );
@@ -177,7 +182,7 @@ function init() {
 	
 	window.addEventListener('keyup', onKeyUp, false);
 	window.addEventListener('keydown', function(event) { Key.onKeydown(event); }, false);
-	
+
 	animloop();
 }
 
@@ -201,6 +206,42 @@ function startGame() {
 	difficulty = 1;
 	difficultyTimer = 0;
 	scene.remove(gameOver);
+	addCrosshair();
+}
+
+function addCrosshair() {
+	var crateMaterial = new THREE.SpriteMaterial( { map: crateTexture, useScreenCoordinates: false, color: 0xff0000 } );
+	crosshair = new THREE.Sprite( crateMaterial );
+	crosshair.position.set( -100, 50, camera.position.z - 1000 );
+	crosshair.scale.set( 48, 48, 1.0 ); // imageWidth, imageHeight
+	scene.add( crosshair );
+	crosshairVisible = true;
+}
+
+function removeCrosshair() {
+	crosshairVisible = false;
+	scene.remove( crosshair );
+}
+
+function moveCrosshair() {
+	if (!spaceship) return;
+	var maxHistory = 9;
+	var newp;
+	var savedPosition = spaceship.position.clone();
+	crosshairPositions.push(savedPosition);
+	if (crosshairPositions.length > maxHistory) {
+		//crosshairPositions.length = maxHistory;
+		newp = crosshairPositions.shift();
+	} else {
+		newp = crosshairPositions[0];
+	}
+	if (crosshairVisible) {
+		crosshair.position.x = newp.x;
+		crosshair.position.y = newp.y;
+		crosshair.position.z = camera.position.z - 700;
+	}
+	console.log(crosshairPositions.length);
+
 }
 
 function collision() {
@@ -239,6 +280,8 @@ function render() {
 	skybox.position.z = camera.position.z;
 	skybox.position.y = camera.position.y;
 	skybox.position.x = camera.position.x;
+
+	moveCrosshair();
 	
 	if (obstacles.isStarted()) {
 		difficultyTimer++;
@@ -275,9 +318,7 @@ function render() {
 	} else {
 		if(Key.isDown(Key.SPACE)) {
 			startGame();
-			
 		}
-		
 	}
 	if (floor.position.z - floorHalfHeight > camera.position.z) {
 		floor.position.z -= floor.geometry.height*2;
