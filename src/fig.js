@@ -25,11 +25,11 @@ var bullets = [];
 var usedBullets = [];
 
 // FLOOR
-var floorTexture = new THREE.ImageUtils.loadTexture( 'gfx/checkerboard.png' );
+var floorTexture = new THREE.ImageUtils.loadTexture( '/gfx/checkeredFloorBrown.png' );
 floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
 floorTexture.repeat.set( 20, 20 );
-var floorMaterial = new THREE.MeshLambertMaterial( { map: floorTexture, side: THREE.DoubleSide } );
-var floorGeometry = new THREE.PlaneGeometry(3000, 10000, 10, 10);
+var floorMaterial = new THREE.MeshBasicMaterial( { map: floorTexture, side: THREE.DoubleSide } );
+var floorGeometry = new THREE.PlaneGeometry(5000, 10000, 10, 10);
 var floor = new THREE.Mesh(floorGeometry, floorMaterial);
 var floor2 = new THREE.Mesh(floorGeometry, floorMaterial);
 var floorHalfHeight = floor.geometry.height/2;
@@ -46,10 +46,26 @@ scene.add(floor2);
 
 
 // LIGHT
-	var light = new THREE.HemisphereLight(0xffffff, 0xffffff,2);
+	var light = new THREE.HemisphereLight(0x999999, 0x999999,2);
 	//light.position.set(0,150,0);
 	scene.add(light);
-	
+
+	// SKYBOX
+var imagePrefix = "gfx/skybox-";
+var directions  = ["xpos", "xneg", "ypos", "yneg", "zpos", "zneg"];
+var imageSuffix = ".jpg";
+var skyGeometry = new THREE.CubeGeometry( 7000, 7000, 7000 );	
+
+var materialArray = [];
+for (var i = 0; i < 6; i++)
+	materialArray.push( new THREE.MeshBasicMaterial({
+		map: THREE.ImageUtils.loadTexture( imagePrefix + directions[i] + imageSuffix ),
+		side: THREE.BackSide
+	}));
+var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
+var skybox = new THREE.Mesh( skyGeometry, skyMaterial );
+scene.add( skybox );
+
 	
 function init() {
 	player.init();
@@ -99,6 +115,9 @@ function render() {
 	
 	//light.position.z = player.z;
 	//light.position.x = player.x;
+	skybox.position.z = camera.position.z;
+	skybox.position.y = camera.position.y;
+	skybox.position.x = camera.position.x;
 	
 	if(!player.dead) {
 		
