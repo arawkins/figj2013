@@ -135,7 +135,7 @@ var player = {
 				if (this.rotation < -Math.PI) this.rotation = -Math.PI;
 			}*/
 		} 
-		var turnAngle = -this.vx * 0.03;
+		var turnAngle = this.vx * 0.03;
 		if (this.inverted) turnAngle *= -1;
 		
 		this.rotation = turnAngle + this.flipRotation;

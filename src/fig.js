@@ -38,11 +38,11 @@ scene.add(floor2);
 
 
 // LIGHT
-	var light = new THREE.HemisphereLight(0x999999, 0x999999,2);
-	//light.position.set(0,150,0);
-	scene.add(light);
+var light = new THREE.HemisphereLight(0x999999, 0x999999,2);
+//light.position.set(0,150,0);
+scene.add(light);
 
-	// SKYBOX
+// SKYBOX
 var imagePrefix = "gfx/skybox-";
 var directions  = ["xpos", "xneg", "ypos", "yneg", "zpos", "zneg"];
 var imageSuffix = ".jpg";
@@ -51,13 +51,48 @@ var skyGeometry = new THREE.CubeGeometry( 7000, 7000, 7000 );
 var materialArray = [];
 for (var i = 0; i < 6; i++)
 	materialArray.push( new THREE.MeshBasicMaterial({
-		map: THREE.ImageUtils.loadTexture( imagePrefix + directions[i] + imageSuffix ),
-		side: THREE.BackSide
-	}));
+	map: THREE.ImageUtils.loadTexture( imagePrefix + directions[i] + imageSuffix ),
+	side: THREE.BackSide
+}));
 var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
 var skybox = new THREE.Mesh( skyGeometry, skyMaterial );
+
 scene.add( skybox );
 
+
+// SHIP MESH
+//var shipMesh = new PinaCollada('ship', 1);
+
+
+////////////
+// CUSTOM //
+////////////
+
+// Note: if imported model appears too dark,
+//   add an ambient light in this file
+//   and increase values in model's exported .js file
+//    to e.g. "colorAmbient" : [0.75, 0.75, 0.75]
+var jsonLoader = new THREE.JSONLoader();
+jsonLoader.load( "models/spaceship.js", addModelToScene );
+// addModelToScene function is called back after model has loaded
+
+var ambientLight = new THREE.AmbientLight(0x111111);
+scene.add(ambientLight);	
+	
+
+
+function addModelToScene( geometry, materials ) 
+{
+	var material = new THREE.MeshFaceMaterial( materials );
+	spaceship = new THREE.Mesh( geometry, material );
+	spaceship.scale.set(50,50,50);
+	spaceship.rotation.y += Math.PI;
+	scene.add( spaceship );
+	console.log("loaded");
+	spaceship.position.z = -500;
+}
+
+	
 	
 function init() {
 	player.init();
@@ -109,6 +144,7 @@ function render() {
 	skybox.position.y = camera.position.y;
 	skybox.position.x = camera.position.x;
 	
+	//shipMesh.position.z = player.z - 500;
 	if(!player.dead) {
 		
 		if(Key.isDown(Key.SPACE)) {
@@ -125,7 +161,7 @@ function render() {
 			}
 		}
 		
-		controls(camera, -floorHalfWidth, floorHalfWidth, ship);
+		controls(camera, -floorHalfWidth, floorHalfWidth, spaceship);
 	} else {
 		console.log("play again?");
 	}
@@ -149,3 +185,5 @@ function render() {
 init();
 
 }
+
+

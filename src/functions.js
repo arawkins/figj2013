@@ -41,3 +41,4 @@ var Key = {
     delete this._pressed[event.keyCode];
   }
 };
+

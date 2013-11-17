@@ -27,7 +27,7 @@ var objects = (function () {
 	
 	function makeBullet() {
 	
-		var bulletMaterial = new THREE.MeshLambertMaterial({color:0xffb0fc});
+		var bulletMaterial = new THREE.MeshBasicMaterial({color:0x00d4dc});
 		var bulletGeometry = new THREE.CubeGeometry(2,2,100,1,1,1);
 		var bullet = new THREE.Mesh(bulletGeometry, bulletMaterial);
 		return bullet;
