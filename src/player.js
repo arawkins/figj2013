@@ -7,6 +7,9 @@ var player = {
 	vz:0,
 	speed:15,
 	startSpeed:15,
+	maxSpeed:30,
+	difficulty:1,
+	
 	startingAltitude:55,
 	maxAltitude:575,
 	minAltitude:30,
@@ -17,10 +20,21 @@ var player = {
 	boostSpeed:5,
 	rotation:0,
 	maxRotation:1,
+	
 	turnSpeed:1.2,
 	maxTurnSpeed:12,
+	finalTurnSpeed:2.4,
+	startTurnSpeed:1.2,
+	startMaxTurnSpeed:12,
+	finalMaxTurnSpeed:16,
+	
 	liftSpeed:0.75,
 	maxLiftSpeed:7,
+	finalLiftSpeed:7.75,
+	startLiftSpeed:0.75,
+	startMaxLiftSpeed:7,
+	finalMaxLiftSpeed:7.223,
+	
 	drift:0.96,
 	boosting:false,
 	braking:false,
@@ -35,13 +49,37 @@ var player = {
 		this.x = 30;
 		this.y = this.startingAltitude;
 		this.z = 0;
+		
 		this.reset();
 	},
 	
 	reset : function () {
 		this.vz = this.startSpeed;
 		this.dead = false;
+		this.turnSpeed = this.startTurnSpeed;
+		this.maxTurnSpeed= this.startMaxTurnSpeed;
+		this.liftSpeed = this.startLiftSpeed;
+		this.maxLiftSpeed = this.startMaxLiftSpeed;
+		this.difficulty = 1;
 	},
+	
+	increaseDifficulty: function () {
+		this.difficulty++;
+		this.vz += 1;
+		if (this.vz > this.maxSpeed) this.vz = this.maxSpeed;
+		
+		if(this.difficulty <= 9) {
+			var up = 0.15;
+			var maxUp = 0.5;
+			
+			this.turnSpeed += up;
+			this.maxTurnSpeed += maxUp;
+			
+			this.liftSpeed += up * 0.625;
+			this.maxLiftSpeed += maxUp * 0.583;
+		}
+	},
+	
 	
 	turnLeft : function() {
 		this.vx -= this.turnSpeed;
@@ -210,7 +248,7 @@ var player = {
 				this.flipCharge ++;
 			}
 		}
-		this.z -= this.vz + difficulty*4;
+		this.z -= this.vz;
 	},
 
 	crash: function () {

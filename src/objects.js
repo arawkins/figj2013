@@ -87,6 +87,7 @@ var objects = (function () {
 		// using THREE.MeshFaceMaterial() in the constructor below
 		//   causes the mesh to use the materials stored in the geometry
 		cube = new THREE.Mesh( cubeGeometry, cubeMaterials );
+		cube.geometry.dynamic=false;
 		return cube;
 	};
 	

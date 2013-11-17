@@ -16,6 +16,7 @@ var obstacles = (function () {
 	var started = false;
 	var baseCubeFrequency = 30;
 	var cubeFrequency = 30;
+	var maxCubeVelocity = 4;
 	
 	var gemThreshold = 300;
 	var gemBaseThreshold = 300;
@@ -23,6 +24,8 @@ var obstacles = (function () {
 	var gems = [];
 	var gemCollisionBox = new THREE.Vector3(75,75,75);
 	var maxGems = 1;
+	
+	var difficulty = 1;
 	
 	function init(_scene, _camera, _leftBound, _rightBound) {
 		scene = _scene;
@@ -44,7 +47,7 @@ var obstacles = (function () {
 		
 		
 		
-		if (tickCounter > cubeFrequency - (difficulty-1)*5) {
+		if (tickCounter > cubeFrequency) {
 			tickCounter = 0;
 			addBox();
 			
@@ -65,26 +68,19 @@ var obstacles = (function () {
 		if(gemCounter > gemThreshold && gems.length < maxGems) {
 			gemCounter = 0;
 			gemThreshold += getRandomInt(-50,50);
-			var rand = getRandomInt(0,3);
+			var rand = getRandomInt(0+difficulty,2+difficulty);
 			var color;
-			switch (rand) {
-				case 0:
+			
+			if (rand <= 3) {
 				color = "blue";
-				break;
-				
-				case 1:
+			} else if (rand <= 5) {
 				color = "green";
-				break;
-				
-				case 2:
+			} else if (rand <= 7) {
 				color = "red";
-				break;
-				
-				case 3: 
+			} else {
 				color = "white";
-				break;
-				
 			}
+			
 			var gem = objects.makeGem(color);
 			gem.position.z = camera.position.z - 3000;
 			gem.position.x = getRandomInt(leftBound,rightBound);
@@ -106,7 +102,18 @@ var obstacles = (function () {
 		
 	};
 	
+	function increaseDifficulty() {
+		difficulty++;
+		if (difficulty >= 7) cubeFrequency -= 1;
+		else cubeFrequency -= (difficulty-1)*5;
+		if (cubeFrequency < 2) cubeFrequency = 2;
+		
+		
+	}
+	
 	function reset() {
+		difficulty = 1;
+		
 		while(cubes.length > 0) {
 			c = cubes.pop();
 			scene.remove(c);
@@ -125,26 +132,35 @@ var obstacles = (function () {
 	function start() {
 		started = true;
 	}
+	
+	function limitValue(value,limit) {
+		if (value < -limit) value = -limit;
+		else if (value > limit) value = limit;
+		return value;
+	}
 
 	function addBox() {
 		
 		var cube;
-		if (oldCubes.length > 0) 
+		if (oldCubes.length > 0)  {
 			cube = oldCubes.pop();
-		else { 		
-			cube = objects.makeCube({x:getRandomInt(100,500), y:getRandomInt(50,500), z:getRandomInt(50,500)});
+			
+		} else { 		
+			cube = objects.makeCube({x:getRandomInt(100,750), y:getRandomInt(50,750), z:getRandomInt(50,600)});
 			cube.geometry.computeBoundingBox();
 		}
+		var vLimit = difficulty;
+		if (vLimit > 4) vLimit = 4;
 		
 		if (difficulty >= 7) {
-			cube.vx = getRandomInt (-difficulty,difficulty);
-			cube.vy = getRandomInt (-difficulty,difficulty);
+			cube.vx = getRandomInt (-vLimit,vLimit);
+			cube.vy = getRandomInt (-vLimit,vLimit);
 		} else if (difficulty >= 5) {
 			var rand = getRandomInt(0,2); 
-			if (rand == 1) cube.vy = getRandomInt (-difficulty,difficulty);
-			else cube.vx = getRandomInt (-difficulty,difficulty);
+			if (rand == 1) cube.vy = getRandomInt (-vLimit,vLimit);
+			else cube.vx = getRandomInt (-vLimit,vLimit);
 		} else if (difficulty >= 3) 
-			cube.vx = getRandomInt (-difficulty,difficulty);
+			cube.vx = getRandomInt (-vLimit,vLimit);
 		else {
 			cube.vx = 0;
 			cube.vy = 0;
@@ -152,7 +168,12 @@ var obstacles = (function () {
 		
 		var newX = getRandomInt(leftBound-500,rightBound+500);
 		//var newX = 0;
-		var newY = getRandomInt(0,1000);
+		if (difficulty >= 6) {
+			var newY = getRandomInt(-500,1000);
+			if (newY < 0 && cube.vy < 0) cube.vy *= -1;
+		} else 
+			var newY = getRandomInt(0,1000);
+		
 		var newZ = getRandomInt(-4900,-5900) + camera.position.z;
 		cube.position.set(newX, newY, newZ);
 		
@@ -223,7 +244,8 @@ var obstacles = (function () {
 		collideCubes: collideCubes,
 		collideGems: collideGems,
 		reset: reset,
-		isStarted: isStarted
+		isStarted: isStarted,
+		increaseDifficulty: increaseDifficulty
 	};
 
 })()
