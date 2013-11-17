@@ -187,24 +187,20 @@ function render() {
 	skybox.position.y = camera.position.y;
 	skybox.position.x = camera.position.x;
 	
-	if (!obstacles.isStarted() && Key.isDown(Key.SPACE)) {
-		
-		startGame();
-	}
-	
 	if (obstacles.isStarted()) {
 		difficultyTimer++;
-		
 		if(difficultyTimer > difficultyThreshold) {
 			difficulty++;
 			difficultyTimer = 0;
 			console.log("Entering level " + difficulty);
 		}
-		
+	} else {
+		if (Key.isDown(Key.SPACE)) {
+			startGame();
+		}
 	}
 	
 	if(!player.dead) {
-		
 			
 		if(Key.isDown(Key.SPACE)) {
 			shoot();
