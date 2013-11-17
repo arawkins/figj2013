@@ -20,7 +20,7 @@ var obstacles = (function () {
 	function tick() {
 		frameCounter = frameCounter + 1;
 		tickCounter++;
-		if (tickCounter > 2) {
+		if (tickCounter > 5) {
 			tickCounter = 0;
 			addBox();
 		}
@@ -28,7 +28,7 @@ var obstacles = (function () {
 		for (var i=0;i<cubes.length;i++) {
 			var thisCube = cubes[i];
 			if (thisCube.position.z > camera.position.z) {
-				cubes.splice(i,5);
+				cubes.splice(i,1);
 				scene.remove(thisCube);
 				oldCubes.push(thisCube);
 			}
