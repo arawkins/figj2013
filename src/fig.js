@@ -190,7 +190,7 @@ function removeCrosshair() {
 
 function moveCrosshair() {
 	if (!spaceship) return;
-	var maxHistory = 9;
+	var maxHistory = 10;
 	var newp;
 	var savedPosition = spaceship.position.clone();
 	crosshairPositions.push(savedPosition);
@@ -211,6 +211,7 @@ function moveCrosshair() {
 
 function collision() {
 	player.crash();
+	removeCrosshair();
 	scene.add(gameOver);
 }
 
