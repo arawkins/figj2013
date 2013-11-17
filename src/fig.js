@@ -149,6 +149,7 @@ function render() {
 		controls(camera, -floorHalfWidth, floorHalfWidth, spaceship);
 	} else {
 		console.log("play again?");
+		return;
 	}
 	if (floor.position.z- floorHalfHeight > camera.position.z) {
 		floor.position.z -= floor.geometry.height*2;
