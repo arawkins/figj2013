@@ -38,7 +38,8 @@ var particles = (function () {
 		
 		var particleCount = this.particleGeometry.vertices.length
 		for( var v = 0; v < particleCount; v++ ) {
-			this.attributes.customColor.value[ v ] = new THREE.Color().setHSL( 1 - v / particleCount, 1.0, 0.5 );
+			this.attributes.customColor.value[ v ] = new THREE.Color().setHSL( 7.0, 0.8 - v / particleCount, 0.5 );
+      //this.attributes.customColor.value[ v ] = new THREE.Color("rgb(225,225,225)");
 			this.attributes.customOffset.value[ v ] = 6.282 * (v / particleCount); // not really used in shaders, move elsewhere
 		}
 		
@@ -95,10 +96,16 @@ var particles = (function () {
 		// x(t) = cos(2t)*(3+cos(3t))
 		// y(t) = sin(2t)*(3+cos(3t))
 		// z(t) = sin(3t)
+    return new THREE.Vector3(
+      20.0 * Math.cos(2.0 * t),
+      20.0 * Math.sin(2.0 * t),
+      50.0 * Math.sin(3.0 * t) );
+    /*
 		return new THREE.Vector3(
 			20.0 * Math.cos(2.0 * t) * (3.0 + Math.cos(3.0 * t)),
 			20.0 * Math.sin(2.0 * t) * (3.0 + Math.cos(3.0 * t)),
 			50.0 * Math.sin(3.0 * t) );
+    */
 	};
 
 	return {

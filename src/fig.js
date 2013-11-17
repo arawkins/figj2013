@@ -326,7 +326,7 @@ window.onload = function () {
     };
 	
     obstacles.tick();
-    //particles.tick();
+    particles.tick();
 
   }
 
