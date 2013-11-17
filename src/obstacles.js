@@ -60,6 +60,7 @@ var obstacles = (function () {
 			if (thisCube.position.z > camera.position.z) {
 				cubes.splice(i,1);
 				scene.remove(thisCube);
+				//thisCube.dispose();
 				oldCubes.push(thisCube);
 			}
 		}
@@ -146,7 +147,7 @@ var obstacles = (function () {
 			cube = oldCubes.pop();
 			
 		} else { 		
-			cube = objects.makeCube({x:getRandomInt(100,750), y:getRandomInt(50,750), z:getRandomInt(50,600)});
+			cube = objects.makeCube({x:getRandomInt(100,650), y:getRandomInt(50,650), z:getRandomInt(50,500)});
 			cube.geometry.computeBoundingBox();
 		}
 		var vLimit = difficulty;

@@ -1,7 +1,7 @@
 window.onload = function () {
 
   var scene = new THREE.Scene();
-  var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 7500 );
+  var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 6000 );
 
   //var font = new THREE.FontUtils();
 
@@ -167,6 +167,9 @@ window.onload = function () {
     if (event.keyCode == Key.SPACE) {
       shoot();
     }
+	if(event.keyCode == 187) {
+		increaseDifficulty();
+	}
   }
 
 
@@ -185,6 +188,13 @@ window.onload = function () {
     scene.remove(gameOver);
     addCrosshair();
     scene.add(particles.getFlare());
+  }
+  
+  function increaseDifficulty() {
+	difficulty++;
+	obstacles.increaseDifficulty();
+	player.increaseDifficulty();
+	console.log("Entering level " + difficulty);
   }
 
   function addCrosshair() {
@@ -266,12 +276,9 @@ window.onload = function () {
     if (obstacles.isStarted()) {
       difficultyTimer++;
       if(difficultyTimer > difficultyThreshold) {
-        difficulty++;
         difficultyTimer = 0;
-        obstacles.increaseDifficulty();
-        //player.vz += difficulty*2;
-        player.increaseDifficulty();
-        console.log("Entering level " + difficulty);
+        
+		increaseDifficulty();
       }
     } else {
       if (Key.isDown(Key.SPACE)) {
@@ -306,18 +313,18 @@ window.onload = function () {
     if (floor2.position.z- floorHalfHeight > camera.position.z) {
       floor2.position.z -= floor2.geometry.height*2;
     }
-
+	
     var hitGem = obstacles.collideGems(spaceship);
 
     if (hitGem != null) {
       //console.log("Got a gem, value: " + hitGem.value);
       score += hitGem.value;
     }
-
+	
     if (obstacles.collideCubes(spaceship)) {
       collision();
     };
-
+	
     obstacles.tick();
     //particles.tick();
 
