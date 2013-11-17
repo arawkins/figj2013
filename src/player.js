@@ -17,8 +17,10 @@ var player = {
 	boostSpeed:5,
 	rotation:0,
 	maxRotation:1,
-	turnSpeed:0.6,
-	maxTurnSpeed:15,
+	turnSpeed:1.2,
+	maxTurnSpeed:12,
+	liftSpeed:0.75,
+	maxLiftSpeed:7,
 	drift:0.96,
 	boosting:false,
 	braking:false,
@@ -51,13 +53,13 @@ var player = {
 		if (this.vx > this.maxTurnSpeed*2) this.vx = this.maxTurnSpeed*2;
 	},
 	moveUp:function () {
-		this.vy += this.turnSpeed;
-		if (this.vy > this.maxTurnSpeed) this.vy = this.maxTurnSpeed;
+		this.vy += this.liftSpeed;
+		if (this.vy > this.maxLiftSpeed) this.vy = this.maxLiftSpeed;
 	},
 	
 	moveDown:function() {
-		this.vy -= this.turnSpeed;
-		if (this.vy < -this.maxTurnSpeed) this.vy = -this.maxTurnSpeed;
+		this.vy -= this.liftSpeed;
+		if (this.vy < -this.maxLiftSpeed) this.vy = -this.maxLiftSpeed;
 	},
 	
 	boost : function() {
@@ -208,7 +210,7 @@ var player = {
 				this.flipCharge ++;
 			}
 		}
-		this.z -= this.vz + difficulty*5;
+		this.z -= this.vz + difficulty*4;
 	},
 
 	crash: function () {

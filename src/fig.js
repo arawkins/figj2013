@@ -130,11 +130,19 @@ function addModelToScene( geometry, materials )
 function init() {
 	player.init();
 	
-	window.addEventListener('keyup', function(event) { Key.onKeyup(event); }, false);
+	window.addEventListener('keyup', onKeyUp, false);
 	window.addEventListener('keydown', function(event) { Key.onKeydown(event); }, false);
 	
 	animloop();
 }
+
+function onKeyUp(event) {
+	Key.onKeyup(event);
+	if (event.keyCode == Key.SPACE) {
+		shoot();
+	}	
+}
+
 
 function animloop() {
 	requestAnimationFrame(animloop);
@@ -163,7 +171,7 @@ function shoot() {
 		var bullet = objects.makeBullet();
 	}	
 	
-	bullet.position.set(player.x-20,player.y-10,player.z);
+	bullet.position.set(player.x-25,player.y,player.z-25);
 	scene.add(bullet);
 	bullets.push(bullet);
 	
@@ -174,7 +182,7 @@ function shoot() {
 	}	
 	
 	var bullet2 = objects.makeBullet();
-	bullet2.position.set(player.x+20,player.y-10,player.z);
+	bullet2.position.set(player.x+25,player.y,player.z-25);
 	scene.add(bullet2);
 	bullets.push(bullet2);
 }
@@ -201,11 +209,12 @@ function render() {
 	}
 	
 	if(!player.dead) {
-			
+		
+		/*	
 		if(Key.isDown(Key.SPACE)) {
 			shoot();
 		}
-		
+		*/
 		for (var i=0;i<bullets.length;i++) {
 			var thisBullet = bullets[i];
 			thisBullet.position.z -= player.speed * 5;
