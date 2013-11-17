@@ -17,7 +17,7 @@ var usedBullets = [];
 var floorTexture = new THREE.ImageUtils.loadTexture( '/gfx/checkeredFloorBrown.png' );
 floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
 floorTexture.repeat.set( 20, 20 );
-var floorMaterial = new THREE.MeshBasicMaterial( { map: floorTexture, side: THREE.DoubleSide } );
+var floorMaterial = new THREE.MeshLambertMaterial( { map: floorTexture, side: THREE.DoubleSide } );
 var floorGeometry = new THREE.PlaneGeometry(5000, 10000, 10, 10);
 var floor = new THREE.Mesh(floorGeometry, floorMaterial);
 var floor2 = new THREE.Mesh(floorGeometry, floorMaterial);
@@ -25,19 +25,43 @@ var floorHalfHeight = floor.geometry.height/2;
 var floorHalfWidth = floor.geometry.width/2;
 floor.position.y = 0;
 floor.rotation.x = Math.PI / 2;
+floor.receiveShadow = true;
 
 floor2.position.y = floor.position.y;
 floor2.rotation.x = floor.rotation.x;
 floor2.position.z = -floor.geometry.height;
+floor2.receiveShadow = true;
 
 scene.add(floor);
 scene.add(floor2);
 
 
 // LIGHT
-var light = new THREE.HemisphereLight(0x999999, 0x999999,2);
-//light.position.set(0,150,0);
+var light = new THREE.HemisphereLight(0xFFFFFF, 0x999999,1);
+light.position.set(3000,1000,-5000);
 scene.add(light);
+
+dirLight = new THREE.DirectionalLight( 0xffffff, 1 );
+dirLight.color.setHSL( 0.1, 1, 0.95 );
+dirLight.position.set( 300, 100, -500 );
+dirLight.position.multiplyScalar( 50 );
+scene.add( dirLight );
+
+dirLight.castShadow = true;
+
+dirLight.shadowMapWidth = 2048;
+dirLight.shadowMapHeight = 2048;
+
+var d = 50;
+
+dirLight.shadowCameraLeft = -d;
+dirLight.shadowCameraRight = d;
+dirLight.shadowCameraTop = d;
+dirLight.shadowCameraBottom = -d;
+
+dirLight.shadowCameraFar = 3500;
+dirLight.shadowBias = -0.0001;
+dirLight.shadowDarkness = 0.35;
 
 // SKYBOX
 var imagePrefix = "gfx/skybox-";
@@ -63,17 +87,12 @@ scene.add( skybox );
 var jsonLoader = new THREE.JSONLoader();
 jsonLoader.load( "models/spaceship.js", addModelToScene );
 
-//var ambientLight = new THREE.AmbientLight(0x111111);
-//scene.add(ambientLight);	
+var ambientLight = new THREE.AmbientLight(0x111111);
+scene.add(ambientLight);	
 
-var hemiLight = new THREE.HemisphereLight(0xFFFFFF, 0xd7cbb0);
+//var hemiLight = new THREE.HemisphereLight(0xFFFFFF, 0xd7cbb0);
 //scene.add(hemiLight);
 
-// White directional light at half intensity shining from the top.
-
-var directionalLight = new THREE.DirectionalLight( 0xffffff, 1 );
-directionalLight.position.set( 2500, 2500, -500 );
-scene.add( directionalLight );
 
 function addModelToScene( geometry, materials ) 
 {
@@ -137,7 +156,7 @@ function render() {
 	skybox.position.y = camera.position.y;
 	skybox.position.x = camera.position.x;
 	
-	directionalLight.position.set( spaceship.position.x + 100, spaceship.position.y+550, spaceship.position.z-500 );
+	//directionalLight.position.set( spaceship.position.x + 100, spaceship.position.y+550, spaceship.position.z-500 );
 	//shipMesh.position.z = player.z - 500;
 	if(!player.dead) {
 		
@@ -148,6 +167,7 @@ function render() {
 		for (var i=0;i<bullets.length;i++) {
 			var thisBullet = bullets[i];
 			thisBullet.position.z -= player.speed * 5;
+			
 			if (Math.abs(thisBullet.position.z - player.z) > 3000) {
 				bullets.splice(i,1);
 				scene.remove(thisBullet);
@@ -171,6 +191,7 @@ function render() {
 	if (obstacles.collide(spaceship)) {
     collision();
   };
+	
 	//obstacles.collide(laser);
 	obstacles.tick();
 

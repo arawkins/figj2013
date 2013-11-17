@@ -9,7 +9,9 @@ var obstacles = (function () {
 
 	var scene;
 	var camera;
-
+	var oldCubes = [];
+	var cubes = [];
+	
 	function init(_scene, _camera) {
 		scene = _scene;
 		camera = _camera;
@@ -19,18 +21,39 @@ var obstacles = (function () {
 		frameCounter = frameCounter + 1;
 		tickCounter++;
 		//console.log(tickCounter);
-		if (tickCounter > 100) {
+		if (tickCounter > 3) {
 			tickCounter = 0;
 			addBox();
 		}
+		
+		for (var i=0;i<cubes.length;i++) {
+			var thisCube = cubes[i];
+			if (thisCube.position.z > camera.position.z) {
+				console.log(cubes.length);
+				cubes.splice(i,1);
+				scene.remove(thisCube);
+				oldCubes.push(thisCube);
+			}
+		}
+		
 	};
 
 	function addBox() {
-		console.log('addbox')
-		var cube = objects.makeCube({x:100, y:100, z:100});
-		cube.position.set(-60, 60, camera.position.z - 1900);
+		console.log('addbox');
+		
+		var cube;
+		if (oldCubes.length > 0) 
+			cube = oldCubes.pop();
+		else 		
+			cube = objects.makeCube({x:100, y:100, z:100});
+			
+		var newX = getRandomInt(-2000,2000);
+		var newY = 60;
+		var newZ = getRandomInt(-1900,-2900) + camera.position.z;
+		cube.position.set(newX, newY, newZ);
 		scene.add(cube);
-		collidableMeshList.push(cube);
+		//collidableMeshList.push(cube);
+		cubes.push(cube);
 	}
 
 	function collide(obj) {
