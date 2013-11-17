@@ -123,8 +123,8 @@ window.onload = function () {
 
 
   // GUI
-  var scoreDiv = document.getElementById("score");
-
+  var guiDiv = document.getElementById("gui");
+	console.log(guiDiv);
 
 
   function addShipToScene( geometry, materials ) 
@@ -288,7 +288,7 @@ window.onload = function () {
     if(!player.dead) {
       //console.log(THREE.FontUtils.drawText);
       //THREE.FontUtils.drawText();
-      scoreDiv.innerHTML = "SCORE: " + score;
+      guiDiv.innerHTML = "SCORE: " + score + "<br />LEVEL: " + difficulty;
       for (var i=0;i<bullets.length;i++) {
         var thisBullet = bullets[i];
         thisBullet.position.z -= player.speed * 5;
