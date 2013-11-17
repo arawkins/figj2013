@@ -1,5 +1,3 @@
-
-
 window.onload = function () {
 
 var scene = new THREE.Scene();
@@ -111,148 +109,148 @@ for (var i = 0; i < 6; i++) {
 	}));
 	
 }
-	var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
-	var skybox = new THREE.Mesh( skyGeometry, skyMaterial );
+var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
+var skybox = new THREE.Mesh( skyGeometry, skyMaterial );
 
-	scene.add( skybox );
+scene.add( skybox );
 
-	// Note: if imported model appears too dark,
-	//   add an ambient light in this file
-	//   and increase values in model's exported .js file
-	//    to e.g. "colorAmbient" : [0.75, 0.75, 0.75]
-	var jsonLoader = new THREE.JSONLoader();
-	jsonLoader.load( "models/spaceship.js", addShipToScene );
-
-
-	// GUI
-	var scoreDiv = document.getElementById("score");
+// Note: if imported model appears too dark,
+//   add an ambient light in this file
+//   and increase values in model's exported .js file
+//    to e.g. "colorAmbient" : [0.75, 0.75, 0.75]
+var jsonLoader = new THREE.JSONLoader();
+jsonLoader.load( "models/spaceship.js", addShipToScene );
 
 
+// GUI
+var scoreDiv = document.getElementById("score");
 
-	function addShipToScene( geometry, materials ) 
-	{
-		var material = new THREE.MeshFaceMaterial( materials );
-		spaceship = new THREE.Mesh( geometry, material );
-		spaceship.scale.set(20,20,20);
-		spaceship.rotation.y += Math.PI;
-		scene.add( spaceship );
-		spaceship.position.z = -500;
-		particles.init(scene, camera, spaceship);
+
+
+function addShipToScene( geometry, materials ) 
+{
+	var material = new THREE.MeshFaceMaterial( materials );
+	spaceship = new THREE.Mesh( geometry, material );
+	spaceship.scale.set(20,20,20);
+	spaceship.rotation.y += Math.PI;
+	scene.add( spaceship );
+	spaceship.position.z = -500;
+	particles.init(scene, camera, spaceship);
+}
+
+
+function addGemToScene(geometry, materials) {
+	var material = new THREE.MeshFaceMaterial( materials );
+	bluegem = new THREE.Mesh( geometry, material );
+	bluegem.scale.set(50,50,50);
+	bluegem.rotation.y += Math.PI;
+	scene.add( bluegem );
+	console.log("loaded");
+	bluegem.position.z = -1500;
+	bluegem.position.y += 100;
+}
+
+var ambientLight = new THREE.AmbientLight(0x111111);
+scene.add(ambientLight);	
+
+function init() {
+	player.init();
+
+	window.addEventListener('keyup', onKeyUp, false);
+	window.addEventListener('keydown', function(event) { Key.onKeydown(event); }, false);
+
+	animloop();
+}
+
+function onKeyUp(event) {
+	Key.onKeyup(event);
+	if (event.keyCode == Key.SPACE) {
+		shoot();
+	}
+}
+
+
+function animloop() {
+	requestAnimationFrame(animloop);
+	render();
+}
+
+function startGame() {
+	player.reset();
+	score = 0;
+	obstacles.reset();
+	scene.remove(logo);
+	difficulty = 1;
+	difficultyTimer = 0;
+	scene.remove(gameOver);
+	addCrosshair();
+	scene.add(particles.getFlare());
+}
+
+function addCrosshair() {
+	var crateMaterial = new THREE.SpriteMaterial( { map: crateTexture, useScreenCoordinates: false, color: 0xff0000 } );
+	crosshair = new THREE.Sprite( crateMaterial );
+	crosshair.position.set( -100, 50, camera.position.z - 1000 );
+	crosshair.scale.set( 48, 48, 1.0 ); // imageWidth, imageHeight
+	scene.add( crosshair );
+	crosshairVisible = true;
+}
+
+function removeCrosshair() {
+	crosshairVisible = false;
+	scene.remove( crosshair );
+}
+
+function moveCrosshair() {
+	if (!spaceship) return;
+	var maxHistory = 10;
+	var newp;
+	var savedPosition = spaceship.position.clone();
+	crosshairPositions.push(savedPosition);
+	if (crosshairPositions.length > maxHistory) {
+		//crosshairPositions.length = maxHistory;
+		newp = crosshairPositions.shift();
+	} else {
+		newp = crosshairPositions[0];
+	}
+	if (crosshairVisible) {
+		crosshair.position.x = newp.x;
+		crosshair.position.y = newp.y;
+		crosshair.position.z = camera.position.z - 700;
 	}
 
 
-	function addGemToScene(geometry, materials) {
-		var material = new THREE.MeshFaceMaterial( materials );
-		bluegem = new THREE.Mesh( geometry, material );
-		bluegem.scale.set(50,50,50);
-		bluegem.rotation.y += Math.PI;
-		scene.add( bluegem );
-		console.log("loaded");
-		bluegem.position.z = -1500;
-		bluegem.position.y += 100;
-	}
+}
 
-	var ambientLight = new THREE.AmbientLight(0x111111);
-	scene.add(ambientLight);	
+function collision() {
+	player.crash();
+	removeCrosshair();
+	scene.add(gameOver);
+}
 
-	function init() {
-		player.init();
+function shoot() {
+	if (usedBullets.length > 0)  {
 
-		window.addEventListener('keyup', onKeyUp, false);
-		window.addEventListener('keydown', function(event) { Key.onKeydown(event); }, false);
+		var bullet = usedBullets.pop();
+	} else {
+		var bullet = objects.makeBullet();
+	}	
 
-		animloop();
-	}
+	bullet.position.set(player.x-25,player.y,player.z-25);
+	scene.add(bullet);
+	bullets.push(bullet);
 
-	function onKeyUp(event) {
-		Key.onKeyup(event);
-		if (event.keyCode == Key.SPACE) {
-			shoot();
-		}
-	}
-
-
-	function animloop() {
-		requestAnimationFrame(animloop);
-		render();
-	}
-
-	function startGame() {
-		player.reset();
-		score = 0;
-		obstacles.reset();
-		scene.remove(logo);
-		difficulty = 1;
-		difficultyTimer = 0;
-		scene.remove(gameOver);
-		addCrosshair();
-		scene.add(particles.getFlare());
-	}
-
-	function addCrosshair() {
-		var crateMaterial = new THREE.SpriteMaterial( { map: crateTexture, useScreenCoordinates: false, color: 0xff0000 } );
-		crosshair = new THREE.Sprite( crateMaterial );
-		crosshair.position.set( -100, 50, camera.position.z - 1000 );
-		crosshair.scale.set( 48, 48, 1.0 ); // imageWidth, imageHeight
-		scene.add( crosshair );
-		crosshairVisible = true;
-	}
-
-	function removeCrosshair() {
-		crosshairVisible = false;
-		scene.remove( crosshair );
-	}
-
-	function moveCrosshair() {
-		if (!spaceship) return;
-		var maxHistory = 10;
-		var newp;
-		var savedPosition = spaceship.position.clone();
-		crosshairPositions.push(savedPosition);
-		if (crosshairPositions.length > maxHistory) {
-			//crosshairPositions.length = maxHistory;
-			newp = crosshairPositions.shift();
-		} else {
-			newp = crosshairPositions[0];
-		}
-		if (crosshairVisible) {
-			crosshair.position.x = newp.x;
-			crosshair.position.y = newp.y;
-			crosshair.position.z = camera.position.z - 700;
-		}
-
-
-	}
-
-	function collision() {
-		player.crash();
-		removeCrosshair();
-		scene.add(gameOver);
-	}
-
-	function shoot() {
-		if (usedBullets.length > 0)  {
-
-			var bullet = usedBullets.pop();
-		} else {
-			var bullet = objects.makeBullet();
-		}	
-
-		bullet.position.set(player.x-25,player.y,player.z-25);
-		scene.add(bullet);
-		bullets.push(bullet);
-
-		if (usedBullets.length > 0) 
-			var bullet2 = usedBullets.pop();
-		else {
-			var bullet2 = objects.makeBullet();
-		}	
-
+	if (usedBullets.length > 0) 
+		var bullet2 = usedBullets.pop();
+	else {
 		var bullet2 = objects.makeBullet();
-		bullet2.position.set(player.x+25,player.y,player.z-25);
-		scene.add(bullet2);
-		bullets.push(bullet2);
-	}
+	}	
+
+	var bullet2 = objects.makeBullet();
+	bullet2.position.set(player.x+25,player.y,player.z-25);
+	scene.add(bullet2);
+	bullets.push(bullet2);
+}
 
 
 function render() {
@@ -279,7 +277,7 @@ function render() {
 		if (Key.isDown(Key.SPACE)) {
 			startGame();
 		}
-
+	}
 		if(!player.dead) {
 			//console.log(THREE.FontUtils.drawText);
 			//THREE.FontUtils.drawText();
@@ -319,13 +317,13 @@ function render() {
 		if (obstacles.collideCubes(spaceship)) {
 			collision();
 		};
+	
+	obstacles.tick();
+	particles.tick();
 
-		obstacles.tick();
-		particles.tick();
+}
 
-	}
-
-	init();
+init();
 
 }
 
