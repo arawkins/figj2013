@@ -1,7 +1,7 @@
 window.onload = function () {
 
   var scene = new THREE.Scene();
-  var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 6000 );
+  var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 5000 );
 
   //var font = new THREE.FontUtils();
 

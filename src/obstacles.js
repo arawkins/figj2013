@@ -101,12 +101,13 @@ var obstacles = (function () {
 		
 		}
 		
+		
 	};
 	
 	function increaseDifficulty() {
 		difficulty++;
 		if (difficulty >= 7) cubeFrequency -= 1;
-		else cubeFrequency -= (difficulty-1)*5;
+		else cubeFrequency -= (difficulty-1)*4;
 		if (cubeFrequency < 2) cubeFrequency = 2;
 		
 		
@@ -148,10 +149,13 @@ var obstacles = (function () {
 			
 		} else { 		
 			cube = objects.makeCube({x:getRandomInt(100,650), y:getRandomInt(50,650), z:getRandomInt(50,500)});
-			cube.geometry.computeBoundingBox();
+			
 		}
 		var vLimit = difficulty;
 		if (vLimit > 4) vLimit = 4;
+		
+		cube.vx = 0;
+		cube.vy = 0;
 		
 		if (difficulty >= 7) {
 			cube.vx = getRandomInt (-vLimit,vLimit);
