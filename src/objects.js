@@ -74,7 +74,7 @@ var objects = (function () {
 		// Create an array of materials to be used in a cube, one for each side
 		var cubeMaterialArray = [];
 		// order to add materials: x+,x-,y+,y-,z+,z-
-		cubeMaterialArray.push( new THREE.MeshBMaterial( { color: 0xe0d8c6 } ) );
+		cubeMaterialArray.push( new THREE.MeshLambertMaterial( { color: 0xe0d8c6 } ) );
 		cubeMaterialArray.push( new THREE.MeshLambertMaterial( { color: 0x837f75 } ) );
 		cubeMaterialArray.push( new THREE.MeshLambertMaterial( { color: 0xe0d8c6 } ) );
 		cubeMaterialArray.push( new THREE.MeshLambertMaterial( { color: 0x837f75 } ) );

@@ -7,7 +7,7 @@ var player = {
 	vz:0,
 	speed:15,
 	startSpeed:15,
-	maxSpeed:30,
+	maxSpeed:50,
 	difficulty:1,
 	
 	startingAltitude:55,
@@ -65,7 +65,7 @@ var player = {
 	
 	increaseDifficulty: function () {
 		this.difficulty++;
-		this.vz += 1;
+		this.vz += 3;
 		if (this.vz > this.maxSpeed) this.vz = this.maxSpeed;
 		
 		if(this.difficulty <= 9) {
