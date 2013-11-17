@@ -63,18 +63,8 @@ scene.add( skybox );
 // SHIP MESH
 //var shipMesh = new PinaCollada('ship', 1);
 
-
-////////////
-// CUSTOM //
-////////////
-
-// Note: if imported model appears too dark,
-//   add an ambient light in this file
-//   and increase values in model's exported .js file
-//    to e.g. "colorAmbient" : [0.75, 0.75, 0.75]
 var jsonLoader = new THREE.JSONLoader();
 jsonLoader.load( "models/spaceship.js", addModelToScene );
-// addModelToScene function is called back after model has loaded
 
 var ambientLight = new THREE.AmbientLight(0x111111);
 scene.add(ambientLight);	
@@ -85,7 +75,7 @@ function addModelToScene( geometry, materials )
 {
 	var material = new THREE.MeshFaceMaterial( materials );
 	spaceship = new THREE.Mesh( geometry, material );
-	spaceship.scale.set(50,50,50);
+	spaceship.scale.set(20,20,20);
 	spaceship.rotation.y += Math.PI;
 	scene.add( spaceship );
 	console.log("loaded");
@@ -121,7 +111,7 @@ function shoot() {
 		var bullet = objects.makeBullet();
 	}	
 	
-	bullet.position.set(player.x-10,player.y,player.z-20);
+	bullet.position.set(player.x-20,player.y-10,player.z);
 	scene.add(bullet);
 	bullets.push(bullet);
 	
@@ -132,7 +122,7 @@ function shoot() {
 	}	
 	
 	var bullet2 = objects.makeBullet();
-	bullet2.position.set(player.x+10,player.y,player.z-20);
+	bullet2.position.set(player.x+20,player.y-10,player.z);
 	scene.add(bullet2);
 	bullets.push(bullet2);
 }
