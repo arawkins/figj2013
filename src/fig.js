@@ -63,9 +63,17 @@ scene.add( skybox );
 var jsonLoader = new THREE.JSONLoader();
 jsonLoader.load( "models/spaceship.js", addModelToScene );
 
-var ambientLight = new THREE.AmbientLight(0x111111);
-scene.add(ambientLight);	
+//var ambientLight = new THREE.AmbientLight(0x111111);
+//scene.add(ambientLight);	
 
+var hemiLight = new THREE.HemisphereLight(0xFFFFFF, 0xd7cbb0);
+//scene.add(hemiLight);
+
+// White directional light at half intensity shining from the top.
+
+var directionalLight = new THREE.DirectionalLight( 0xffffff, 1 );
+directionalLight.position.set( 2500, 2500, -500 );
+scene.add( directionalLight );
 
 function addModelToScene( geometry, materials ) 
 {
@@ -129,6 +137,7 @@ function render() {
 	skybox.position.y = camera.position.y;
 	skybox.position.x = camera.position.x;
 	
+	directionalLight.position.set( spaceship.position.x + 100, spaceship.position.y+550, spaceship.position.z-500 );
 	//shipMesh.position.z = player.z - 500;
 	if(!player.dead) {
 		

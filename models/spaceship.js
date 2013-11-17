@@ -28,7 +28,7 @@
 		"depthWrite" : true,
 		"mapDiffuse" : "TUT-SHIP.JPG",
 		"mapDiffuseWrap" : ["repeat", "repeat"],
-		"shading" : "Lambert",
+		"shading" : "Phong",
 		"specularCoef" : 50,
 		"transparency" : 1.0,
 		"transparent" : false,
