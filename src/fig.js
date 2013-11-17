@@ -11,7 +11,7 @@ window.onload = function () {
   var crosshairVisible = false;
   var crosshairPositions = [];
 
-  var renderer = new THREE.WebGLRenderer({antialias: true});
+  var renderer = new THREE.WebGLRenderer({antialias: false});
   renderer.setSize( window.innerWidth, window.innerHeight );
   document.body.appendChild( renderer.domElement );
 
