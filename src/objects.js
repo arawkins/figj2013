@@ -28,12 +28,14 @@ var objects = (function () {
 		bluegemMaterial = new THREE.MeshFaceMaterial( materials );
 		bluegemGeometry = geometry;
 		gems["blue"] = new THREE.Mesh( bluegemGeometry, bluegemMaterial );
+		gems["blue"].scale.set(80,80,80);
 	}
 
 	function addGreenGem(geometry, materials) {
 		greengemMaterial = new THREE.MeshFaceMaterial( materials );
 		greengemGeometry = geometry;
 		gems["green"] = new THREE.Mesh( greengemGeometry, greengemMaterial );
+		gems["green"].scale.set(100,100,100);
 	}
 
 
@@ -41,60 +43,22 @@ var objects = (function () {
 		redgemMaterial = new THREE.MeshFaceMaterial( materials );
 		redgemGeometry = geometry;
 		gems["red"] = new THREE.Mesh( redgemGeometry, redgemMaterial );
+		gems["red"].scale.set(100,100,100);
 	}
 
 	function addWhiteGem(geometry, materials) {
 		whitegemMaterial = new THREE.MeshFaceMaterial( materials );
 		whitegemGeometry = geometry;
 		gems["white"] = new THREE.Mesh( whitegemGeometry, whitegemMaterial );
+		gems["white"].scale.set(100,100,100);
 	}
 	
 	function makeGem(color) {
 		var gem = gems[color];
 		
-		gem.scale.set(50,50,50);
 		return gem;
 		
-		/*
-		var material;
-		var geometry;
-		var value;
 		
-		switch(color) {
-		
-			
-			
-			case "green":
-			material = greengemMaterial;
-			geometry = greengemGeometry;
-			value = 250;
-			break;
-			
-			case "red":
-			material = redgemMaterial;
-			geometry = redgemGeometry;
-			value = 500;
-			break;
-			
-			case "white":
-			material = whitegemMaterial;
-			geometry = whitegemGeometry;
-			value = 1000;
-			break;
-			
-			case "blue":
-			material = bluegemMaterial;
-			geometry = bluegemGeometry;
-			value = 100;
-			break;
-			
-		}
-		
-		
-		gem = new THREE.Mesh( geometry, material );
-		gem.scale.set(50,50,50);
-		return gem;
-		*/
 	}
 	
 	

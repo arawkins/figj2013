@@ -205,7 +205,7 @@ function moveCrosshair() {
 		crosshair.position.y = newp.y;
 		crosshair.position.z = camera.position.z - 700;
 	}
-	console.log(crosshairPositions.length);
+	
 
 }
 

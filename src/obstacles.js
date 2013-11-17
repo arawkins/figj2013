@@ -17,9 +17,10 @@ var obstacles = (function () {
 	var baseCubeFrequency = 30;
 	var cubeFrequency = 30;
 	
-	var gemFrequency = 300;
+	var gemThreshold = 300;
+	var gemBaseThreshold = 300;
 	var gemCounter = 0;
-	
+	var gems = [];
 	
 	function init(_scene, _camera, _leftBound, _rightBound) {
 		scene = _scene;
@@ -61,7 +62,45 @@ var obstacles = (function () {
 		gemCounter++;
 		if(gemCounter > gemThreshold) {
 			gemCounter = 0;
+			gemThreshold += getRandomInt(-50,50);
+			var rand = getRandomInt(0,3);
+			var color;
 			
+			switch (rand) {
+				case 0:
+				color = "blue";
+				break;
+				
+				case 1:
+				color = "green";
+				break;
+				
+				case 2:
+				color = "red";
+				break;
+				
+				case 3: 
+				color = "white";
+				break;
+				
+			}
+			var gem = objects.makeGem(color);
+			gem.position.z = camera.position.z - 3000;
+			gem.position.x = getRandomInt(leftBound,rightBound);
+			gem.position.y = getRandomInt(50,450);
+			scene.add(gem);
+			gems.push(gem);
+			
+		}
+		
+		for (var i=0;i<gems.length;i++) {
+			var g = gems[i];
+			g.rotation.y += 0.02;
+			if (g.position.z > camera.position.z) {
+				gems.splice(i,1);
+				scene.remove(g);
+			}
+		
 		}
 		
 	};
@@ -72,7 +111,7 @@ var obstacles = (function () {
 			scene.remove(c);
 			oldCubes.push(c);
 		}
-		
+		gemThreshold = gemBaseThreshold;
 		tickCounter = 0;
 		cubeFrequency = baseCubeFrequency;
 		start();
