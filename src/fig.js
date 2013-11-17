@@ -4,6 +4,9 @@ window.onload = function () {
 
 var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 5000 );
+
+//var font = new THREE.FontUtils();
+
 var spaceship;
 
 var crosshair;
@@ -35,8 +38,10 @@ var difficultyThreshold = 1800;
 var bullets = [];
 var usedBullets = [];
 
+var score = 0;
+
 // FLOOR
-var floorTexture = new THREE.ImageUtils.loadTexture( '/gfx/checkeredFloorBrown.png' );
+var floorTexture = new THREE.ImageUtils.loadTexture( 'gfx/checkeredFloorBrown.png' );
 floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
 floorTexture.repeat.set( 20, 20 );
 var floorMaterial = new THREE.MeshLambertMaterial( { map: floorTexture, side: THREE.DoubleSide } );
@@ -114,6 +119,9 @@ var jsonLoader = new THREE.JSONLoader();
 jsonLoader.load( "models/spaceship.js", addShipToScene );
 
 
+// GUI
+var scoreDiv = document.getElementById("score");
+
 
 
 function addShipToScene( geometry, materials ) 
@@ -166,6 +174,7 @@ function animloop() {
 
 function startGame() {
 	player.reset();
+	score = 0;
 	obstacles.reset();
 	scene.remove(logo);
 	difficulty = 1;
@@ -263,12 +272,9 @@ function render() {
 	}
 	
 	if(!player.dead) {
-		
-		/*	
-		if(Key.isDown(Key.SPACE)) {
-			shoot();
-		}
-		*/
+		//console.log(THREE.FontUtils.drawText);
+		//THREE.FontUtils.drawText();
+		scoreDiv.innerHTML = "SCORE: " + score;
 		for (var i=0;i<bullets.length;i++) {
 			var thisBullet = bullets[i];
 			thisBullet.position.z -= player.speed * 5;
@@ -293,8 +299,15 @@ function render() {
 	if (floor2.position.z- floorHalfHeight > camera.position.z) {
 		floor2.position.z -= floor2.geometry.height*2;
 	}
-
-	if (obstacles.collide(spaceship)) {
+	
+	var hitGem = obstacles.collideGems(spaceship);
+	
+	if (hitGem != null) {
+		//console.log("Got a gem, value: " + hitGem.value);
+		score += hitGem.value;
+	}
+	
+	if (obstacles.collideCubes(spaceship)) {
 		collision();
 	};
 	

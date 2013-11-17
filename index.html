@@ -3,11 +3,24 @@
 <head>
 <meta charset="utf-8">
 <title>ThreeJS</title>
+<link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'>
+
 <style>
 body {
 	background:#000;
 	overflow:hidden;
 	}
+	
+#score {
+	position:absolute;
+	top:30px;
+	left:30px;
+	color:#FFF;
+	font-family: 'Droid Sans', sans-serif;
+	font-size:16px;
+	font-weight:700;
+	}
+	
 </style>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/three.js/r61/three.min.js"></script>
 <script src="src/ColladaLoader.js"></script>
@@ -21,6 +34,6 @@ body {
 </head>
 
 <body>
-    
+    <div id="score">SCORE</div>
 </body>
 </html>

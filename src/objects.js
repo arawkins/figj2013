@@ -17,7 +17,7 @@ var objects = (function () {
 	function loadGems() {
 		var jsonLoader = new THREE.JSONLoader();
 		jsonLoader.load( "models/bluegem.js", addBlueGem );
-		jsonLoader.load( "models/greengem.js", addWhiteGem);
+		jsonLoader.load( "models/greengem.js", addGreenGem);
 		jsonLoader.load( "models/redgem.js", addRedGem);
 		jsonLoader.load( "models/whitegem.js", addWhiteGem);
 
@@ -28,7 +28,8 @@ var objects = (function () {
 		bluegemMaterial = new THREE.MeshFaceMaterial( materials );
 		bluegemGeometry = geometry;
 		gems["blue"] = new THREE.Mesh( bluegemGeometry, bluegemMaterial );
-		gems["blue"].scale.set(80,80,80);
+		gems["blue"].scale.set(100,100,100);
+		gems["blue"].value = 100;
 	}
 
 	function addGreenGem(geometry, materials) {
@@ -36,6 +37,7 @@ var objects = (function () {
 		greengemGeometry = geometry;
 		gems["green"] = new THREE.Mesh( greengemGeometry, greengemMaterial );
 		gems["green"].scale.set(100,100,100);
+		gems["green"].value = 250;
 	}
 
 
@@ -44,6 +46,8 @@ var objects = (function () {
 		redgemGeometry = geometry;
 		gems["red"] = new THREE.Mesh( redgemGeometry, redgemMaterial );
 		gems["red"].scale.set(100,100,100);
+		gems["red"].value = 500;
+		
 	}
 
 	function addWhiteGem(geometry, materials) {
@@ -51,6 +55,8 @@ var objects = (function () {
 		whitegemGeometry = geometry;
 		gems["white"] = new THREE.Mesh( whitegemGeometry, whitegemMaterial );
 		gems["white"].scale.set(100,100,100);
+		gems["white"].value = 500;
+		
 	}
 	
 	function makeGem(color) {

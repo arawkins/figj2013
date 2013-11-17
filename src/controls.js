@@ -53,18 +53,12 @@ var controls = function (camera, leftBound, rightBound, playerMesh) {
 	
 	
 	if (Key.isDown(Key.UP)) {
-		//player.boost();
 		player.moveUp();
-	} else {
-		//player.stopBoosting();
-	}
+	} 
 	
 	if (Key.isDown(Key.DOWN)) {
-		//player.brake();
 		player.moveDown();
-	} else {
-		//player.stopBraking();
-	}
+	} 
 	
 	
 	player.update();
@@ -74,10 +68,8 @@ var controls = function (camera, leftBound, rightBound, playerMesh) {
 		else if (player.x > rightBound) player.x = rightBound;
 	}
 	
-	//camera.rotation.z = player.rotation;
 	playerMesh.position.set(player.x, player.y, player.z)
 	playerMesh.rotation.z = player.rotation;
-	//var dx = player.x-leftBound;
 	
 	
 	camera.position.set(player.x/1.1, player.y/1.3 + cameraOffsetY, player.z + cameraOffsetZ)
@@ -89,8 +81,6 @@ var controls = function (camera, leftBound, rightBound, playerMesh) {
 		camera.rotation.y = 0;
 	}
 	
-	//camera.position.x = player.x;
-	//camera.position.y = player.y;
-	//camera.position.z = player.z;
+	
 	
 };

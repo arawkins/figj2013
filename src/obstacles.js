@@ -21,6 +21,7 @@ var obstacles = (function () {
 	var gemBaseThreshold = 300;
 	var gemCounter = 0;
 	var gems = [];
+	var gemCollisionBox = new THREE.Vector3(75,75,75);
 	
 	function init(_scene, _camera, _leftBound, _rightBound) {
 		scene = _scene;
@@ -65,7 +66,7 @@ var obstacles = (function () {
 			gemThreshold += getRandomInt(-50,50);
 			var rand = getRandomInt(0,3);
 			var color;
-			
+			console.log(rand);
 			switch (rand) {
 				case 0:
 				color = "blue";
@@ -95,7 +96,7 @@ var obstacles = (function () {
 		
 		for (var i=0;i<gems.length;i++) {
 			var g = gems[i];
-			g.rotation.y += 0.02;
+			g.rotation.y += 0.04;
 			if (g.position.z > camera.position.z) {
 				gems.splice(i,1);
 				scene.remove(g);
@@ -112,6 +113,10 @@ var obstacles = (function () {
 			oldCubes.push(c);
 		}
 		gemThreshold = gemBaseThreshold;
+		while (gems.length > 0) {
+			g = gems.pop();
+			scene.remove(g);	
+		}
 		tickCounter = 0;
 		cubeFrequency = baseCubeFrequency;
 		start();
@@ -157,7 +162,7 @@ var obstacles = (function () {
 		cubes.push(cube);
 	}
 
-	function collide(obj) {
+	function collideCubes(obj) {
 		for (var i=0;i<cubes.length;i++) {
 			var cube = cubes[i];
 			var bb = cube.geometry.boundingBox;
@@ -168,7 +173,10 @@ var obstacles = (function () {
 			var cy = cube.position.y;
 			var oy = obj.position.y;
 			
+			
+			
 			if(oz < cz + bb.max.z) {
+				
 				if(oy > cy + bb.min.y && oy < cy + bb.max.y) {
 				
 					if(ox > cx + bb.min.x && ox < cx + bb.max.x) {
@@ -176,19 +184,44 @@ var obstacles = (function () {
 						return true;
 					}
 				}
-				
-			
 			}	
-			
-			
+				
+		}
+		return false;
+	};
+	
+	function collideGems(obj) {
+		for (var i=0;i<gems.length;i++) {
+			var gem = gems[i];
+			//console.log(gem.geometry.boundingBox);
+			var gx = gem.position.x;
+			var ox = obj.position.x;
+			var gz = gem.position.z;
+			var oz = obj.position.z;
+			var gy = gem.position.y;
+			var oy = obj.position.y;	
+			//console.log(gx,ox,gz,oz,gy,oy);
+			if(oz > gz - gemCollisionBox.z && oz < gz + gemCollisionBox.z) {
+				
+				if(oy > gy - gemCollisionBox.y && oy < gy + gemCollisionBox.y) {
+				
+					if(ox > gx - gemCollisionBox.x && ox < gx + gemCollisionBox.x) {
+						gems.splice(i,1);
+						scene.remove(gem);
+						return gem;
+					}
+				}
+			}
 		}
 		
-	};
+		return null;
+	}
 
 	return {
 		init: init,
 		tick: tick,
-		collide: collide,
+		collideCubes: collideCubes,
+		collideGems: collideGems,
 		reset: reset,
 		isStarted: isStarted
 	};
