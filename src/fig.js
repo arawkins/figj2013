@@ -1,3 +1,5 @@
+var difficulty = 1;
+
 window.onload = function () {
 
 var scene = new THREE.Scene();
@@ -22,9 +24,9 @@ gameOver.position.set( window.innerWidth/2, window.innerHeight/2, 0 );
 gameOver.scale.set( 1024, 256, 1.0 ); // imageWidth, imageHeight
 //scene.add( gameOver );
 
-var difficulty = 1;
+
 var difficultyTimer = 0;
-var difficultyThreshold = 3600;
+var difficultyThreshold = 1800;
 var bullets = [];
 var usedBullets = [];
 
@@ -178,6 +180,7 @@ function shoot() {
 }
 
 function render() {
+	renderer.render(scene, camera);
 	//light.position.z = player.z;
 	//light.position.x = player.x;
 	skybox.position.z = camera.position.z;
@@ -195,6 +198,7 @@ function render() {
 		if(difficultyTimer > difficultyThreshold) {
 			difficulty++;
 			difficultyTimer = 0;
+			console.log("Entering level " + difficulty);
 		}
 		
 	}
@@ -220,13 +224,12 @@ function render() {
 		controls(camera, leftBound, rightBound, spaceship);
 	} else {
 		if(Key.isDown(Key.SPACE)) {
-			console.log('made it here');
 			startGame();
 			
 		}
 		
 	}
-	if (floor.position.z- floorHalfHeight > camera.position.z) {
+	if (floor.position.z - floorHalfHeight > camera.position.z) {
 		floor.position.z -= floor.geometry.height*2;
 	}
 
@@ -238,10 +241,8 @@ function render() {
 		collision();
 	};
 	
-	//obstacles.collide(laser);
 	obstacles.tick();
-
-	renderer.render(scene, camera);
+	
 }
 
 init();

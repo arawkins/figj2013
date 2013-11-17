@@ -83,6 +83,12 @@ var controls = function (camera, leftBound, rightBound, playerMesh) {
 	camera.position.set(player.x/1.1, player.y/1.3 + cameraOffsetY, player.z + cameraOffsetZ)
 	camera.rotation.z = player.flipRotation;
 	
+	if (Key.isDown(Key.ENTER)) {
+		camera.rotation.y = Math.PI;
+	} else {
+		camera.rotation.y = 0;
+	}
+	
 	//camera.position.x = player.x;
 	//camera.position.y = player.y;
 	//camera.position.z = player.z;

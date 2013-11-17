@@ -208,7 +208,7 @@ var player = {
 				this.flipCharge ++;
 			}
 		}
-		this.z -= this.vz;
+		this.z -= this.vz + difficulty*5;
 	},
 
 	crash: function () {

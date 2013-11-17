@@ -14,6 +14,8 @@ var obstacles = (function () {
 	var oldCubes = [];
 	var cubes = [];
 	var started = false;
+	var baseCubeFrequency = 30;
+	var cubeFrequency = 30;
 	
 	function init(_scene, _camera, _leftBound, _rightBound) {
 		scene = _scene;
@@ -32,9 +34,13 @@ var obstacles = (function () {
 		
 		frameCounter = frameCounter + 1;
 		tickCounter++;
-		if (tickCounter > 5) {
+		
+		
+		
+		if (tickCounter > cubeFrequency - (difficulty-1)*5) {
 			tickCounter = 0;
 			addBox();
+			
 		}
 		
 		for (var i=0;i<cubes.length;i++) {
@@ -57,6 +63,7 @@ var obstacles = (function () {
 			oldCubes.push(c);
 		}
 		tickCounter = 0;
+		cubeFrequency = baseCubeFrequency;
 		start();
 	}
 	
@@ -69,17 +76,31 @@ var obstacles = (function () {
 		var cube;
 		if (oldCubes.length > 0) 
 			cube = oldCubes.pop();
-		else 		
+		else { 		
 			cube = objects.makeCube({x:getRandomInt(100,500), y:getRandomInt(50,500), z:getRandomInt(50,500)});
+			cube.geometry.computeBoundingBox();
+		}
 		
-		cube.vx = getRandomInt (-3,3);
-		cube.vy = getRandomInt (-3,3);
+		if (difficulty >= 7) {
+			cube.vx = getRandomInt (-difficulty,difficulty);
+			cube.vy = getRandomInt (-difficulty,difficulty);
+		} else if (difficulty >= 5) {
+			var rand = getRandomInt(0,2); 
+			if (rand == 1) cube.vy = getRandomInt (-difficulty,difficulty);
+			else cube.vx = getRandomInt (-difficulty,difficulty);
+		} else if (difficulty >= 3) 
+			cube.vx = getRandomInt (-difficulty,difficulty);
+		else {
+			cube.vx = 0;
+			cube.vy = 0;
+		}
+		
 		var newX = getRandomInt(leftBound-500,rightBound+500);
 		//var newX = 0;
 		var newY = getRandomInt(0,1000);
 		var newZ = getRandomInt(-4900,-5900) + camera.position.z;
 		cube.position.set(newX, newY, newZ);
-		cube.geometry.computeBoundingBox();
+		
 		
 		scene.add(cube);
 		//collidableMeshList.push(cube);
@@ -97,54 +118,21 @@ var obstacles = (function () {
 			var cy = cube.position.y;
 			var oy = obj.position.y;
 			
-			//console.log('oz:', oz);
-			//console.log('cz:', cz);
-			/*console.log(cz + bb.min.z);
-			console.log(cz + bb.max.z);
-			console.log(cz);
-			console.log(bb.min.z);
-			console.log(bb.max.z);
-			console.log('-------');
-			*/
-			//console.log('ox',ox,'leftx',cx + bb.min.x,'rightx',cx + bb.max.x);
 			if(oz < cz + bb.max.z) {
-				if(ox > cx + bb.min.x && ox < cx + bb.max.x) {
-					if(oy > cy + bb.min.y && oy < cy + bb.max.y) {
+				if(oy > cy + bb.min.y && oy < cy + bb.max.y) {
+				
+					if(ox > cx + bb.min.x && ox < cx + bb.max.x) {
+					
 						return true;
 					}
 				}
 				
-				/*
-				if(ox > cx - bb.min.x || ox < cx + bb.max.x) {
-					if(oy > cy - bb.min.y || oy < cy + bb.max.y) {
-						return true;
-					}
-				}*/
+			
 			}	
-			//console.log(bb.min);
-			//console.log(bb.max);
-			//if (bb.z > obj.position.z) {
-				
-			//}
+			
 			
 		}
-		/*
-		var originPoint = obj.position.clone();
-
-		for (var vertexIndex = 0; vertexIndex < obj.geometry.vertices.length; vertexIndex++) {
-			var localVertex = obj.geometry.vertices[vertexIndex].clone();
-			var globalVertex = localVertex.applyMatrix4( obj.matrix );
-			var directionVector = globalVertex.sub( obj.position );
-
-			var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
-			var collisionResults = ray.intersectObjects( collidableMeshList );
-			if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() ) {
-				if (frameCounter > 1) { // dunno why, but rays collide during frame 1
-					return true;
-				}
-			}
-		}
-		*/
+		
 	};
 
 	return {
