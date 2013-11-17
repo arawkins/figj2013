@@ -26,7 +26,7 @@
 		"colorSpecular" : [1.0, 1.0, 1.0],
 		"depthTest" : true,
 		"depthWrite" : true,
-		"shading" : "Lambert",
+		"shading" : "Phong",
 		"specularCoef" : 25,
 		"transparency" : 1.0,
 		"transparent" : true,

@@ -22,6 +22,7 @@ var obstacles = (function () {
 	var gemCounter = 0;
 	var gems = [];
 	var gemCollisionBox = new THREE.Vector3(75,75,75);
+	var maxGems = 1;
 	
 	function init(_scene, _camera, _leftBound, _rightBound) {
 		scene = _scene;
@@ -61,12 +62,11 @@ var obstacles = (function () {
 		}
 		
 		gemCounter++;
-		if(gemCounter > gemThreshold) {
+		if(gemCounter > gemThreshold && gems.length < maxGems) {
 			gemCounter = 0;
 			gemThreshold += getRandomInt(-50,50);
 			var rand = getRandomInt(0,3);
 			var color;
-			console.log(rand);
 			switch (rand) {
 				case 0:
 				color = "blue";
