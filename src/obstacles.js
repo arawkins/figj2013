@@ -73,7 +73,7 @@ var obstacles = (function () {
 			if (thisCube.vz < 0) thisCube.vz *= 0.95;
 			if (thisCube.vz > -1) thisCube.vz = 0;
 			
-			if (thisCube.vr > 0) {
+			if (thisCube.vr !=0) {
 				thisCube.rotation.y += thisCube.vr;
 				thisCube.rotation.x += thisCube.vr;
 			}
@@ -279,9 +279,9 @@ var obstacles = (function () {
 			var hitCube = collideCubes(obj);
 			
 			if (hitCube != null) {
-				//hitCube.vy = -10;
-				hitCube.vz = -75;
-				//hitCube.vr = 0.01;
+				hitCube.vy = -10;
+				hitCube.vz = -35;
+				hitCube.vr = -0.01;
 			}
 		}
 		
