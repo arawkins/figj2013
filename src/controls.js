@@ -80,7 +80,22 @@ var controls = function (camera, leftBound, rightBound, playerMesh) {
 	} else {
 		camera.rotation.y = 0;
 	}
-	
+
+	if (Gamepad.supported) {
+		var pads = Gamepad.getStates();
+		var pad = pads[0]; // assume only 1 player.
+		if (pad) {
+			if ( pad.dpadUp )
+				player.moveUp();
+			if ( pad.dpadDown )
+				player.moveDown();
+			if ( pad.dpadLeft )
+				player.turnLeft();
+			if ( pad.dpadRight )
+				player.turnRight();
+		}
+	}
+
 	
 	
 };
