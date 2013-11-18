@@ -125,6 +125,18 @@ var obstacles = (function () {
 		
 		}
 		
+		for (var i=0;i<enemyBullets.length;i++) {
+			var e = enemyBullets[i];
+			e.position.x += e.vx;
+			e.position.y += e.vy;
+			if (e.position.z > player.z) {
+				enemyBullets.splice(i,1);
+				scene.remove(e);
+				oldEnemyBullets.push(e);
+			}
+		}
+		
+		/*
 		var eb;
 		
 		if(oldEnemyBullets.length > 0) 
@@ -140,7 +152,6 @@ var obstacles = (function () {
 		scene.add(eb);
 		
 		for (var i=0;i<enemyBullets.length;i++) {
-			console.log ('adsfasfda');
 			var e = enemyBullets[i];
 			e.position.x += e.vx;
 			e.position.y += e.vy;
@@ -149,7 +160,7 @@ var obstacles = (function () {
 				scene.remove(e);
 				oldEnemyBullets.push(e);
 			}
-		}
+		}*/
 	
 		if (difficulty >= 30303) {
 			enemyCounter++;
@@ -182,36 +193,60 @@ var obstacles = (function () {
 				
 				
 				var e = enemies[i];
-				e.position.x += e.vx;
-				e.position.z += e.vz;
-				e.position.y += e.vy;
 				
-				e.vy += 0.05;
-				e.vx *= 0.95;
-				
-				var afterDir = getRandomInt(0,1);
-				if(afterDir == 0) afterDir = -1;
-				
-				if(Math.abs(e.vx) < 2) {
+				if(enemy.firing) {
 					
-					e.vx = 0;
-					enemy.firing = true;
-					e.vx = 10 * afterDir;
+				} else {
+					e.position.x += e.vx;
+					e.position.z += e.vz;
+					e.position.y += e.vy;
 					
+					e.vy += 0.05;
+					e.vx *= 0.95;
+					
+					var afterDir = getRandomInt(0,1);
+					if(afterDir == 0) afterDir = -1;
+					
+					if(Math.abs(e.vx) < 2) {
+						
+						e.vx = 0;
+						enemy.firing = true;
+						enemy.fireCount = 0;
+						e.vx = 10 * afterDir;
+						
+					}
+					
+					
+					
+					if (e.position.y > 1500) {
+						enemies.splice(i,1);
+						scene.remove(e);
+						oldEnemies.push(e);
+					}
 				}
 				
-				
-				
-				if (e.position.y > 1500) {
-					enemies.splice(i,1);
-					scene.remove(e);
-					oldEnemies.push(e);
-				}
 			
 		}
 		}
 	};
 	
+	function fireEnemyBullet(originX,originY,originZ) {
+		var eb;
+		
+		if(oldEnemyBullets.length > 0) 
+			eb = oldEnemyBullets.pop();
+		else 
+			eb = objects.makeEnemyBullet();
+			
+		eb.position.set(originX,originY,originZ);
+		eb.scale.set(64,64,1);
+		eb.vx = getRandomInt(-10,10);
+		eb.vy = getRandomInt(-10,10);
+		enemyBullets.push(eb);
+		scene.add(eb);
+		
+		
+	}
 	function increaseDifficulty() {
 		difficulty++;
 		if (difficulty >= 7) cubeFrequency -= 1;
