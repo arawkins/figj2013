@@ -18,7 +18,7 @@ var particles = (function () {
 		engine = new ParticleEngine();
 		var smokeValues = Examples.smoke;
 		smokeValues.positionBase.x = obj.position.x - 0;
-		smokeValues.positionBase.y = obj.position.y - 0;
+		smokeValues.positionBase.y = obj.position.y + 7;
 		smokeValues.positionBase.z = obj.position.z + 25;
 		console.log(smokeValues.positionBase.x, smokeValues.positionBase.y, smokeValues.positionBase.z);
 		engine.setValues(smokeValues);
