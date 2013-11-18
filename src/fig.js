@@ -219,7 +219,7 @@ window.onload = function () {
 
 	function moveCrosshair() {
 		if (!spaceship) return;
-		var maxHistory = 10;
+		var maxHistory = 4;
 		var newp;
 		var savedPosition = spaceship.position.clone();
 		crosshairPositions.push(savedPosition);
