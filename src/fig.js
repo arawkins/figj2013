@@ -332,7 +332,7 @@ window.onload = function () {
 			collision();
 		};
 
-		obstacles.collidePlayerBullets(bullets);
+		//obstacles.collidePlayerBullets(bullets);
 
 		obstacles.tick();
 		particles.tick();

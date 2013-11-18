@@ -17,6 +17,8 @@ var objects = (function () {
 	var enemyTexture;
 	var enemyMaterial;
 	
+	var enemyBulletTexture;
+	
 	function loadGems() {
 		var jsonLoader = new THREE.JSONLoader();
 		jsonLoader.load( "models/bluegem.js", addBlueGem );
@@ -29,6 +31,7 @@ var objects = (function () {
 	
 	function loadEnemyTextures() {
 		enemyTexture = THREE.ImageUtils.loadTexture('gfx/mask.png');
+		enemyBulletTexture = THREE.ImageUtils.loadTexture('gfx/bullet.png');
 	}
 	
 	function addBlueGem(geometry, materials) {
@@ -85,6 +88,16 @@ var objects = (function () {
 		
 	}
 	
+	function makeEnemyBullet() {
+		var enemyMaterial = new THREE.SpriteMaterial( { map: enemyBulletTexture, useScreenCoordinates: false } );
+		var enemy = new THREE.Sprite (enemyMaterial);
+		enemy.vx = 0;
+		enemy.vy = 0;
+		enemy.vz = 0;
+		
+		return enemy;
+	}
+	
 	// Cube idea
 	function makeCube(dimensions) {
 		var cube;
@@ -131,7 +144,8 @@ var objects = (function () {
 		loadGems : loadGems,
 		makeGem : makeGem,
 		loadEnemyTextures : loadEnemyTextures,
-		makeEnemy : makeEnemy
+		makeEnemy : makeEnemy,
+		makeEnemyBullet: makeEnemyBullet
 	};
 
 })()

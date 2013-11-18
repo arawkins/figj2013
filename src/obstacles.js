@@ -33,6 +33,10 @@ var obstacles = (function () {
 	var maxEnemies = 50;
 	var oldEnemies = [];
 	
+	var bullets = [];
+	
+	var enemyBullets = [];
+	var oldEnemyBullets = [];
 	
 	var difficulty = 1;
 	
@@ -121,6 +125,32 @@ var obstacles = (function () {
 		
 		}
 		
+		var eb;
+		
+		if(oldEnemyBullets.length > 0) 
+			eb = oldEnemyBullets.pop();
+		else 
+			eb = objects.makeEnemyBullet();
+			
+		eb.position.set(0,200,player.z-1000);
+		eb.scale.set(64,64,1);
+		eb.vx = getRandomInt(-10,10);
+		eb.vy = getRandomInt(-10,10);
+		enemyBullets.push(eb);
+		scene.add(eb);
+		
+		for (var i=0;i<enemyBullets.length;i++) {
+			console.log ('adsfasfda');
+			var e = enemyBullets[i];
+			e.position.x += e.vx;
+			e.position.y += e.vy;
+			if (e.position.z > player.z) {
+				enemyBullets.splice(i,1);
+				scene.remove(e);
+				oldEnemyBullets.push(e);
+			}
+		}
+	
 		if (difficulty >= 30303) {
 			enemyCounter++;
 			if (enemyCounter > enemyThreshold && enemies.length < maxEnemies) {
@@ -149,7 +179,8 @@ var obstacles = (function () {
 			}
 			
 			for (var i=0;i<enemies.length;i++) {
-			
+				
+				
 				var e = enemies[i];
 				e.position.x += e.vx;
 				e.position.z += e.vz;
@@ -164,7 +195,7 @@ var obstacles = (function () {
 				if(Math.abs(e.vx) < 2) {
 					
 					e.vx = 0;
-					console.log("fire");
+					enemy.firing = true;
 					e.vx = 10 * afterDir;
 					
 				}
@@ -220,6 +251,8 @@ var obstacles = (function () {
 		else if (value > limit) value = limit;
 		return value;
 	}
+	
+	
 
 	function addBox() {
 		
