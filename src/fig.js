@@ -141,7 +141,7 @@ window.onload = function () {
 		spaceship.rotation.y += Math.PI;
 		scene.add( spaceship );
 		spaceship.position.z = -500;
-		//particles.init(scene, camera, spaceship);
+		particles.init(scene, camera, spaceship);
 	}
 
 
@@ -193,7 +193,6 @@ window.onload = function () {
 		difficultyTimer = 0;
 		scene.remove(gameOver);
 		addCrosshair();
-		scene.add(particles.getFlare());
 	}
 
 	function increaseDifficulty() {
@@ -239,8 +238,10 @@ window.onload = function () {
 	}
 
 	function collision() {
+		if (player.dead) return;
 		player.crash();
 		removeCrosshair();
+		particles.startSmoke(spaceship);
 		scene.add(gameOver);
 	}
 
@@ -334,7 +335,7 @@ window.onload = function () {
 		obstacles.collidePlayerBullets(bullets);
 
 		obstacles.tick();
-		//particles.tick();
+		particles.tick();
 
 	}
 

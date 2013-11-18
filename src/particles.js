@@ -12,16 +12,18 @@ var particles = (function () {
 		scene = _scene;
 		camera = _camera;
 		spaceship = _spaceship;
-
 	};
 
-	function startSmoke() {
+	function startSmoke(obj) {
 		engine = new ParticleEngine();
 		var smokeValues = Examples.smoke;
-		smokeValues.positionBase.z = camera.position.z - 2400;
+		smokeValues.positionBase.x = obj.position.x - 0;
+		smokeValues.positionBase.y = obj.position.y - 0;
+		smokeValues.positionBase.z = obj.position.z + 25;
 		console.log(smokeValues.positionBase.x, smokeValues.positionBase.y, smokeValues.positionBase.z);
 		engine.setValues(smokeValues);
 		engine.initialize();
+		console.log("TODO: remove smoke")
 		scene.add(engine.particleMesh);
 	}
 
@@ -76,7 +78,9 @@ var particles = (function () {
 			// 
 		});
 
+		// WARNING: Not used right now
 		this.tick = function () {
+			if (!engine) return;
 			var dt = clock.getDelta();
 			engine.update( dt * 0.5 );
 			return;
@@ -110,6 +114,7 @@ var particles = (function () {
 	};
 
 	function tick() {
+		if (!engine) return;
 		var dt = clock.getDelta();
 		engine.update( dt * 0.5 );
 		return;
