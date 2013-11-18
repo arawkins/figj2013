@@ -23,12 +23,13 @@ var particles = (function () {
 		console.log(smokeValues.positionBase.x, smokeValues.positionBase.y, smokeValues.positionBase.z);
 		engine.setValues(smokeValues);
 		engine.initialize();
-		console.log("TODO: remove smoke")
 		scene.add(engine.particleMesh);
 	}
 
 	function stopSmoke() {
-		scene.remove(engine.particleMesh);
+		if (engine && engine.particleMesh) {
+			scene.remove(engine.particleMesh);
+		}
 	}
 
 	function getFlare() {
@@ -143,7 +144,8 @@ var particles = (function () {
 		init: init,
 		tick: tick,
 		getFlare: getFlare,
-		startSmoke: startSmoke
+		startSmoke: startSmoke,
+		stopSmoke: stopSmoke
 	};
 
 })()

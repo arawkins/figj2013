@@ -191,6 +191,7 @@ window.onload = function () {
 		scene.remove(logo);
 		difficulty = 1;
 		difficultyTimer = 0;
+		particles.stopSmoke();
 		scene.remove(gameOver);
 		addCrosshair();
 	}
