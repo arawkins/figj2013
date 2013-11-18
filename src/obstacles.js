@@ -69,6 +69,14 @@ var obstacles = (function () {
 			thisCube.position.x += thisCube.vx;
 			thisCube.position.y += thisCube.vy;
 			thisCube.position.z += thisCube.vz;
+			
+			if (thisCube.vz < 0) thisCube.vz *= 0.95;
+			if (thisCube.vz > -1) thisCube.vz = 0;
+			
+			if (thisCube.vr > 0) {
+				thisCube.rotation.y += thisCube.vr;
+				thisCube.rotation.x += thisCube.vr;
+			}
 			if (thisCube.position.z > camera.position.z) {
 				cubes.splice(i,1);
 				scene.remove(thisCube);
@@ -229,6 +237,10 @@ var obstacles = (function () {
 		cube.vx = 0;
 		cube.vy = 0;
 		cube.vz = 0;
+		cube.vr = 0;
+		cube.rotation.y = 0;
+		cube.rotation.x = 0;
+		
 		if (difficulty >= 7) {
 			cube.vz = getRandomInt (0, -vLimit);
 			cube.vx = getRandomInt (-vLimit,vLimit);
@@ -264,7 +276,13 @@ var obstacles = (function () {
 	function collidePlayerBullets(bullets) {
 		for (var i=0;i<bullets.length;i++) {
 			var obj = bullets[i];
-			if (collideCubes(obj)) console.log("I hit a box!");
+			var hitCube = collideCubes(obj);
+			
+			if (hitCube != null) {
+				//hitCube.vy = -10;
+				hitCube.vz = -75;
+				//hitCube.vr = 0.01;
+			}
 		}
 		
 		//return null;
