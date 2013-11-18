@@ -20,6 +20,7 @@ var player = {
 	boostSpeed:5,
 	rotation:0,
 	maxRotation:1,
+	health:3,
 	
 	turnSpeed:1.2,
 	maxTurnSpeed:12,
@@ -61,6 +62,7 @@ var player = {
 		this.liftSpeed = this.startLiftSpeed;
 		this.maxLiftSpeed = this.startMaxLiftSpeed;
 		this.difficulty = 1;
+		this.health =3;
 	},
 	
 	increaseDifficulty: function () {

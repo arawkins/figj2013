@@ -350,11 +350,13 @@ window.onload = function () {
 			score += hitGem.value;
 		}
 
-		if (obstacles.collideCubes(spaceship)!= null) {
+		if (obstacles.collideCubes(spaceship)!= null || obstacles.collideEnemyBullets(spaceship)) {
 			collision();
 		};
 
-		//obstacles.collidePlayerBullets(bullets);
+		if (obstacles.collidePlayerBullets(bullets)) {
+			score += 50;
+		}
 
 		obstacles.tick();
 		particles.tick();

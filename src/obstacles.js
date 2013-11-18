@@ -162,7 +162,7 @@ var obstacles = (function () {
 			}
 		}*/
 	
-		if (difficulty >= 30303) {
+		if (difficulty >= 3) {
 			enemyCounter++;
 			if (enemyCounter > enemyThreshold && enemies.length < maxEnemies) {
 				enemyCounter = 0;
@@ -175,15 +175,19 @@ var obstacles = (function () {
 				var rand = getRandomInt(0,1);
 				if (rand == 0) {
 					enemy.position.set(leftBound*2,500,player.z - 2000);
-					enemy.vx = 155;
+					enemy.vx = getRandomInt(120,200);
 					enemy.vy = -5;
 				} else {
 					enemy.position.set(rightBound*2,500,player.z - 2000);
-					enemy.vx = -155;
+					enemy.vx = -getRandomInt(120,200);
 					enemy.vy = -5;
 				}
 				enemy.scale.set(256,256,1);
 				enemy.vz = -player.vz;
+				enemy.firing = false;
+				enemy.doneFiring = false;
+				enemy.fireCount = 0;
+				enemy.fireCounter = 0;
 				enemies.push(enemy);
 				scene.add(enemy);
 
@@ -194,28 +198,43 @@ var obstacles = (function () {
 				
 				var e = enemies[i];
 				
-				if(enemy.firing) {
-					
-				} else {
+				if(e.firing) {
+					e.fireCounter++;
+					if (e.fireCounter > 15) {
+						e.fireCount++;
+						e.fireCounter = 0;
+						fireEnemyBullet(e.position.x, e.position.y, e.position.z);
+						if(e.fireCount > 20) {
+							e.firing = false;
+							e.doneFiring = true;
+							var rand = getRandomInt(0,1);
+							if (rand == 0) e.vx = 15;
+							else e.vx = -15;
+							e.vy = 30;
+						}
+					}
+				} 
+				else {
 					e.position.x += e.vx;
-					e.position.z += e.vz;
 					e.position.y += e.vy;
 					
-					e.vy += 0.05;
-					e.vx *= 0.95;
-					
-					var afterDir = getRandomInt(0,1);
-					if(afterDir == 0) afterDir = -1;
-					
-					if(Math.abs(e.vx) < 2) {
+						if(!e.doneFiring) {
+						e.vy += 0.05;
+						e.vx *= 0.95;
 						
-						e.vx = 0;
-						enemy.firing = true;
-						enemy.fireCount = 0;
-						e.vx = 10 * afterDir;
+						var afterDir = getRandomInt(0,1);
+						if(afterDir == 0) afterDir = -1;
 						
+						if(Math.abs(e.vx) < 2) {
+							
+							e.vx = 0;
+							e.firing = true;
+							e.fireCount = 0;
+							e.vx = 10 * afterDir;
+							
+						}
+					
 					}
-					
 					
 					
 					if (e.position.y > 1500) {
@@ -225,7 +244,8 @@ var obstacles = (function () {
 					}
 				}
 				
-			
+				e.position.z += e.vz;
+					
 		}
 		}
 	};
@@ -237,11 +257,24 @@ var obstacles = (function () {
 			eb = oldEnemyBullets.pop();
 		else 
 			eb = objects.makeEnemyBullet();
+		
+		//var dx = originX - player.x;
+		//var dy = originY - player.y;
+		//var dz = originZ - player.z;
+		//console.log(dz);
+		//var ang = Math.atan2(dy,dx);
+		//var angX = Math.atan2(dz,dx);
+		//var angY = Math.atan2(dz,dy);
+		
+		var bulletSpeed = player.vz/2;
+		//var bvx = bulletSpeed * Math.cos(ang);
+		//var bvy = bulletSpeed * Math.sin(ang);
 			
 		eb.position.set(originX,originY,originZ);
 		eb.scale.set(64,64,1);
-		eb.vx = getRandomInt(-10,10);
-		eb.vy = getRandomInt(-10,10);
+		eb.vx = 0;
+		eb.vy = 0;
+		eb.vz = 5;
 		enemyBullets.push(eb);
 		scene.add(eb);
 		
@@ -260,6 +293,20 @@ var obstacles = (function () {
 	
 	function reset() {
 		difficulty = 1;
+		
+		while(enemies.length > 0) {
+			e = enemies.pop();
+			scene.remove(e);
+			oldEnemies.push(e);
+		
+		}
+		
+		while(enemyBullets.length > 0) {
+			e = enemyBullets.pop();
+			scene.remove(e);
+			oldEnemyBullets.push(e);
+		
+		}
 		
 		while(cubes.length > 0) {
 			c = cubes.pop();
@@ -344,17 +391,71 @@ var obstacles = (function () {
 	function collidePlayerBullets(bullets) {
 		for (var i=0;i<bullets.length;i++) {
 			var obj = bullets[i];
-			var hitCube = collideCubes(obj);
-			
+			//var hitCube = collideCubes(obj);
+			/*
 			if (hitCube != null) {
 				hitCube.vy = -10;
 				hitCube.vz = -35;
 				hitCube.vr = -0.01;
 			}
+			*/
+			
+			for (var j=0;i<enemies.length;i++) {
+				var e = enemies[j];
+				var cx = e.position.x;
+				var ox = obj.position.x;
+				var cz = e.position.z;
+				var oz = obj.position.z;
+				var cy = e.position.y;
+				var oy = obj.position.y;
+				
+				if(oz < cz + 128) {
+					
+					if(oy > cy -128 && oy < cy + 128) {
+					
+						if(ox > cx -128 && ox < cx + 128) {
+						
+							e.doneFiring = true;
+							scene.remove(e);
+							enemies.splice(i,1);
+							oldEnemies.push(e);
+						}
+					}
+				}	
+					
+			}
+			
 		}
 		
+		
+		
 		//return null;
-	}	
+	}
+
+	function collideEnemyBullets(obj) {
+		for (var i=0;i<enemyBullets.length;i++) {
+		
+			var eb = enemyBullets[i];
+			var cx = eb.position.x;
+			var ox = obj.position.x;
+			var cz = eb.position.z;
+			var oz = obj.position.z;
+			var cy = eb.position.y;
+			var oy = obj.position.y;
+			
+			if(oz < cz + 50) {
+				
+				if(oy > cy - 50 && oy < cy + 50) {
+					//console.log("hit!");
+					if(ox > cx -50 && ox < cx + 50) {
+						//console.log("hit!");
+						return true;
+					}
+				}
+			}
+		}
+	}
+	
 	function collideCubes(obj) {
 		for (var i=0;i<cubes.length;i++) {
 			var cube = cubes[i];
@@ -418,7 +519,8 @@ var obstacles = (function () {
 		reset: reset,
 		isStarted: isStarted,
 		increaseDifficulty: increaseDifficulty,
-		collidePlayerBullets: collidePlayerBullets
+		collidePlayerBullets: collidePlayerBullets,
+		collideEnemyBullets: collideEnemyBullets
 	};
 
 })()
