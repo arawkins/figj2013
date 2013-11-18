@@ -9,6 +9,7 @@ var obstacles = (function () {
 
 	var scene;
 	var camera;
+	var player;
 	var leftBound;
 	var rightBound;
 	var oldCubes = [];
@@ -25,11 +26,21 @@ var obstacles = (function () {
 	var gemCollisionBox = new THREE.Vector3(75,75,75);
 	var maxGems = 1;
 	
+	var enemyThreshold = 300;
+	var enemyThresholdBase = 300;
+	var enemyCounter = 0;
+	var enemies = [];
+	var maxEnemies = 50;
+	var oldEnemies = [];
+	
+	
 	var difficulty = 1;
 	
-	function init(_scene, _camera, _leftBound, _rightBound) {
+	
+	function init(_scene, _camera, _leftBound, _rightBound, _player) {
 		scene = _scene;
 		camera = _camera;
+		player = _player;
 		leftBound = _leftBound;
 		rightBound = _rightBound;
 		started = false;
@@ -102,7 +113,64 @@ var obstacles = (function () {
 		
 		}
 		
-		
+		if (difficulty >= 30303) {
+			enemyCounter++;
+			if (enemyCounter > enemyThreshold && enemies.length < maxEnemies) {
+				enemyCounter = 0;
+				var enemy;
+				if (oldEnemies.length > 0) 
+					enemy = oldEnemies.pop();
+				else 
+					var enemy = objects.makeEnemy();
+				
+				var rand = getRandomInt(0,1);
+				if (rand == 0) {
+					enemy.position.set(leftBound*2,500,player.z - 2000);
+					enemy.vx = 155;
+					enemy.vy = -5;
+				} else {
+					enemy.position.set(rightBound*2,500,player.z - 2000);
+					enemy.vx = -155;
+					enemy.vy = -5;
+				}
+				enemy.scale.set(256,256,1);
+				enemy.vz = -player.vz;
+				enemies.push(enemy);
+				scene.add(enemy);
+
+			}
+			
+			for (var i=0;i<enemies.length;i++) {
+			
+				var e = enemies[i];
+				e.position.x += e.vx;
+				e.position.z += e.vz;
+				e.position.y += e.vy;
+				
+				e.vy += 0.05;
+				e.vx *= 0.95;
+				
+				var afterDir = getRandomInt(0,1);
+				if(afterDir == 0) afterDir = -1;
+				
+				if(Math.abs(e.vx) < 2) {
+					
+					e.vx = 0;
+					console.log("fire");
+					e.vx = 10 * afterDir;
+					
+				}
+				
+				
+				
+				if (e.position.y > 1500) {
+					enemies.splice(i,1);
+					scene.remove(e);
+					oldEnemies.push(e);
+				}
+			
+		}
+		}
 	};
 	
 	function increaseDifficulty() {
@@ -111,6 +179,8 @@ var obstacles = (function () {
 		else cubeFrequency -= 4;
 		if (cubeFrequency < 4) cubeFrequency = 4;
 		
+		enemyThreshold -= 10;
+		if (enemyThreshold < 120) enemyThreshold = 120;
 		
 	}
 	
@@ -127,6 +197,7 @@ var obstacles = (function () {
 			g = gems.pop();
 			scene.remove(g);	
 		}
+		enemyThreshold = enemyThresholdBase;
 		tickCounter = 0;
 		cubeFrequency = baseCubeFrequency;
 		start();
@@ -189,7 +260,15 @@ var obstacles = (function () {
 		//collidableMeshList.push(cube);
 		cubes.push(cube);
 	}
-
+	
+	function collidePlayerBullets(bullets) {
+		for (var i=0;i<bullets.length;i++) {
+			var obj = bullets[i];
+			if (collideCubes(obj)) console.log("I hit a box!");
+		}
+		
+		//return null;
+	}	
 	function collideCubes(obj) {
 		for (var i=0;i<cubes.length;i++) {
 			var cube = cubes[i];
@@ -209,13 +288,13 @@ var obstacles = (function () {
 				
 					if(ox > cx + bb.min.x && ox < cx + bb.max.x) {
 					
-						return true;
+						return cube;
 					}
 				}
 			}	
 				
 		}
-		return false;
+		return null;
 	};
 	
 	function collideGems(obj) {
@@ -252,7 +331,8 @@ var obstacles = (function () {
 		collideGems: collideGems,
 		reset: reset,
 		isStarted: isStarted,
-		increaseDifficulty: increaseDifficulty
+		increaseDifficulty: increaseDifficulty,
+		collidePlayerBullets: collidePlayerBullets
 	};
 
 })()

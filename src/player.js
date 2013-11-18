@@ -5,9 +5,9 @@ var player = {
 	vx:0,
 	vy:0,
 	vz:0,
-	speed:15,
-	startSpeed:15,
-	maxSpeed:50,
+	speed:22,
+	startSpeed:22,
+	maxSpeed:65,
 	difficulty:1,
 	
 	startingAltitude:55,

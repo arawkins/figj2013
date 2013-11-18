@@ -17,8 +17,14 @@ window.onload = function () {
 
   var crateTexture = THREE.ImageUtils.loadTexture( 'gfx/crosshairs.gif' );
   var logoTexture = THREE.ImageUtils.loadTexture( 'gfx/logo.png' );
+  
   var logoMaterial = new THREE.SpriteMaterial( { map: logoTexture, useScreenCoordinates: true, alignment: THREE.SpriteAlignment.center  } );
   var logo = new THREE.Sprite( logoMaterial );
+  
+  objects.loadEnemyTextures();
+  
+ 
+  
   logo.position.set( window.innerWidth/2, window.innerHeight/2, 0 );
   logo.scale.set( 1024, 256, 1.0 ); // imageWidth, imageHeight
   scene.add( logo );
@@ -65,7 +71,7 @@ window.onload = function () {
   var leftBound = -floorHalfWidth + 1000;
   var rightBound = floorHalfWidth - 1000;
 
-  obstacles.init(scene, camera, leftBound, rightBound);
+  obstacles.init(scene, camera, leftBound, rightBound, player);
 
   // LIGHT
   var light = new THREE.HemisphereLight(0xFFFFFF, 0x999999,1);
@@ -321,9 +327,11 @@ window.onload = function () {
       score += hitGem.value;
     }
 	
-    if (obstacles.collideCubes(spaceship)) {
+    if (obstacles.collideCubes(spaceship)!= null) {
       collision();
     };
+	
+	obstacles.collidePlayerBullets(bullets);
 	
     obstacles.tick();
     //particles.tick();
