@@ -173,6 +173,19 @@ window.onload = function () {
 		if (event.keyCode == Key.SPACE) {
 			shoot();
 		}
+		if (Gamepad.supported) {
+			var pad = Gamepad.getStates()[0];
+			if (pad) {
+				if (pad.faceButton0) shoot();
+				if (pad.faceButton1) shoot();
+				if (pad.faceButton2) shoot();
+				if (pad.faceButton3) shoot();
+				if (pad.leftShoulder0) shoot();
+				if (pad.rightShoulder0) shoot();
+				if (pad.leftShoulder1) shoot();
+				if (pad.rightShoulder1) shoot();
+			}
+		}
 		if(event.keyCode == 187) {
 			increaseDifficulty();
 		}
@@ -288,14 +301,8 @@ window.onload = function () {
 
 				increaseDifficulty();
 			}
-		} else {
-			if (Key.isDown(Key.SPACE)) {
-				startGame();
-			}
 		}
-		if(!player.dead) {
-			//console.log(THREE.FontUtils.drawText);
-			//THREE.FontUtils.drawText();
+		if (!player.dead) {
 			guiDiv.innerHTML = "SCORE: " + score + "<br />LEVEL: " + difficulty;
 			for (var i=0;i<bullets.length;i++) {
 				var thisBullet = bullets[i];
@@ -310,8 +317,22 @@ window.onload = function () {
 
 			controls(camera, leftBound, rightBound, spaceship);
 		} else {
-			if(Key.isDown(Key.SPACE)) {
+			if (Key.isDown(Key.SPACE)) {
 				startGame();
+			}
+			if (Gamepad.supported) {
+				var pad = Gamepad.getStates()[0];
+				if (pad) {
+					if (pad.start) startGame();
+					if (pad.faceButton0) startGame();
+					if (pad.faceButton1) startGame();
+					if (pad.faceButton2) startGame();
+					if (pad.faceButton3) startGame();
+					if (pad.leftShoulder0) startGame();
+					if (pad.rightShoulder0) startGame();
+					if (pad.leftShoulder1) startGame();
+					if (pad.rightShoulder1) startGame();
+				}
 			}
 		}
 		if (floor.position.z - floorHalfHeight > camera.position.z) {
